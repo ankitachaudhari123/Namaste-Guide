@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # namaste_guide
 
 A new Flutter project.
@@ -14,3 +15,7 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+=======
+# Namaste-Guide
+I want to shift my focus from frontend development to mastering Flutter.
+>>>>>>> b8d5112e28dae984f32509b7ee1a82933d218d40
