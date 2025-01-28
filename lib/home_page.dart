@@ -13,6 +13,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,25 +90,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Color(0xff1f1835),
-          selectedItemColor: Colors.white,
-          unselectedItemColor: Color(0xff565171),
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.face_6),
-            label: 'todys mood',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_rounded),
-            label: 'Profile',
-          ),
-        ],
-      ),
+       
     );
   }
 }
