@@ -19,31 +19,31 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
         color: Color(0xff1f1835),
         child:Column(
           children: [
-            // Container(
-            //   child: Padding(
-            //     padding: const EdgeInsets.all(20),
-            //     child: TextField(
-            //       style: TextStyle(
-            //         color: Colors.white,
-            //       ),
-            //       decoration: InputDecoration(
-            //             labelText: 'Enter Your Fillings',
-            //             labelStyle: TextStyle(color: Colors.white),
-            //             enabledBorder: OutlineInputBorder(
-            //           borderSide: BorderSide(color: Colors.white, width: 2.0), // Normal border color
-            //         ),
-            //         focusedBorder: OutlineInputBorder(
-            //           borderSide: BorderSide(color: Colors.white, width: 2.0), // Border color when focused
-            //         ),
-            //           ),
-            //     ),
-            //   ),
-            // ),
+            Container(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: TextField(
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                  decoration: InputDecoration(
+                        labelText: 'Enter Your Fillings',
+                        labelStyle: TextStyle(color: Colors.white),
+                        enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white, width: 2.0), // Normal border color
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white, width: 2.0), // Border color when focused
+                    ),
+                      ),
+                ),
+              ),
+            ),
             Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+              padding: const EdgeInsets.only(left: 20, right: 20,),
               child: Container(
                 width: double.infinity,
-                height: 100,
+                height: 80,
                 child: Row(
                   children: [
                     Expanded(
@@ -52,10 +52,16 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
-                              Icons.star,
+                              Icons.emoji_emotions_outlined,
+                              color: Colors.white,
+                              size: 40,
                             ),
                             Text(
-                              "gsfsdhcj"
+                              "Happy",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold
+                              ),
                             )
                           ],
                         ),
@@ -64,7 +70,45 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
                      SizedBox(width: 10),
                     Expanded(
                       child:Container(
-                        color:Colors.red[300],
+                          child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.mode_of_travel_outlined,
+                              color: Colors.white,
+                              size: 40,
+                            ),
+                            Text(
+                              "travel",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                     SizedBox(width: 10),
+                    Expanded(
+                      child:Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.emoji_emotions_outlined,
+                              color: Colors.white,
+                              size: 40,
+                            ),
+                            Text(
+                              "Sad",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                     SizedBox(width: 10),
@@ -78,10 +122,10 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(10),
               child: Container(
                 width: double.infinity,
-                height: 100,
+                height: 80,
                 child: Row(
                   children: [
                     Expanded(
@@ -101,47 +145,230 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
                         color:Colors.red[900],
                       ),
                     ),
+                     SizedBox(width: 10),
+                    Expanded(
+                      child:Container(
+                          child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.mode_of_travel_outlined,
+                              color: Colors.white,
+                              size: 40,
+                            ),
+                            Text(
+                              "travel",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20),
+              padding: const EdgeInsets.only(left: 10, right: 10),
               child: Container(
                 width: double.infinity,
-                height: 100,
+                height: 80,
                 child: Row(
                   children: [
                     Expanded(
                       child:Container(
-                       color:Colors.red[100],
+                       child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.work_outlined,
+                              color: Colors.white,
+                              size: 40,
+                            ),
+                            Text(
+                              "Work Mood",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                      SizedBox(width: 10),
                     Expanded(
                       child:Container(
-                        color:Colors.red[300],
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.computer_rounded,
+                              color: Colors.white,
+                              size: 40,
+                            ),
+                            Text(
+                              "Study",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                     SizedBox(width: 10),
                     Expanded(
                       child:Container(
-                        color:Colors.red[400],
+                          child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.computer_rounded,
+                              color: Colors.white,
+                              size: 40,
+                            ),
+                            Text(
+                              "Study",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                     SizedBox(width: 10),
+                    Expanded(
+                      child:Container(
+                          child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.mode_of_travel_outlined,
+                              color: Colors.white,
+                              size: 40,
+                            ),
+                            Text(
+                              "travel",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Container(
+                width: double.infinity,
+                height: 80,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child:Container(
+                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.yard_outlined,
+                              color: Colors.white,
+                              size: 40,
+                            ),
+                            Text(
+                              "Gym OR Yoga",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                     SizedBox(width: 10),
+                    Expanded(
+                      child:Container(
+                          child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.party_mode_outlined,
+                              color: Colors.white,
+                              size: 40,
+                            ),
+                            Text(
+                              "Party",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Expanded(
+                      child:Container(
+                          child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.mode_of_travel_outlined,
+                              color: Colors.white,
+                              size: 40,
+                            ),
+                            Text(
+                              "travel",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                     SizedBox(width: 10),
+                    Expanded(
+                      child:Container(
+                          child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.mode_of_travel_outlined,
+                              color: Colors.white,
+                              size: 40,
+                            ),
+                            Text(
+                              "travel",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),  
           ],
         ),
-
-
-
-
-          
-
-
       ),
     );
   }
