@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
 import 'ChooseYourMoodAndWriteText.dart';
+import 'ListOfMoods.dart';
 
 
 void main() => runApp(TodaysMood());
@@ -34,7 +35,7 @@ class _TodaysMoodState extends State<TodaysMood> {
         body: TabBarView(
           children: [
             ChooseYourMood(),
-            Center(child: Text('Profile Content')),
+            ListOfMoods(),
           ],
         ),
       ),

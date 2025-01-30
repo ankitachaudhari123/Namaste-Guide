@@ -48,6 +48,14 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
                   children: [
                     Expanded(
                       child:Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          gradient: const LinearGradient(
+                            colors: [Color(0xff7c49de), Color(0xffdcb383)],
+                            begin: Alignment.bottomLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                        ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -74,12 +82,12 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
-                              Icons.mode_of_travel_outlined,
+                              Icons.water_drop_rounded,
                               color: Colors.white,
                               size: 40,
                             ),
                             Text(
-                              "travel",
+                              "Sad",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold
@@ -96,12 +104,12 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
-                              Icons.emoji_emotions_outlined,
+                              Icons.assignment_late_outlined,
                               color: Colors.white,
                               size: 40,
                             ),
                             Text(
-                              "Sad",
+                              "Angary",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold
@@ -114,7 +122,25 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
                     SizedBox(width: 10),
                     Expanded(
                       child:Container(
-                        color:Colors.red[400],
+                        child:Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.airline_seat_flat,
+                              color: Colors.white,
+                              size: 40,
+                            ),
+                            Text(
+                              "Sleepe",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
                       ),
                     ),
                   ],
@@ -130,19 +156,76 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
                   children: [
                     Expanded(
                       child:Container(
-                       color:Colors.red[400],
+                       child:Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.call,
+                              color: Colors.white,
+                              size: 40,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 15),
+                              child: Text(
+                                "Speak to some one",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
                       ),
                     ),
                      SizedBox(width: 10),
                     Expanded(
                       child:Container(
-                        color:Colors.red[600],
+                        child:Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.work_outline,
+                              color: Colors.white,
+                              size: 40,
+                            ),
+                            Text(
+                              "Work",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
                       ),
                     ),
                     SizedBox(width: 10),
                     Expanded(
                       child:Container(
-                        color:Colors.red[900],
+                        child:Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.computer,
+                              color: Colors.white,
+                              size: 40,
+                            ),
+                            Text(
+                              "Study",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
                       ),
                     ),
                      SizedBox(width: 10),
@@ -152,12 +235,12 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
-                              Icons.mode_of_travel_outlined,
+                              Icons.yard_outlined,
                               color: Colors.white,
                               size: 40,
                             ),
                             Text(
-                              "travel",
+                              "Gym & Yoga",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold
@@ -184,12 +267,12 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
-                              Icons.work_outlined,
+                              Icons.party_mode_outlined,
                               color: Colors.white,
                               size: 40,
                             ),
                             Text(
-                              "Work Mood",
+                              "Party",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold
@@ -206,12 +289,12 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
-                              Icons.computer_rounded,
+                              Icons.travel_explore_rounded,
                               color: Colors.white,
                               size: 40,
                             ),
                             Text(
-                              "Study",
+                              "Travel",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold
@@ -228,12 +311,12 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
-                              Icons.computer_rounded,
+                              Icons.clean_hands_outlined,
                               color: Colors.white,
                               size: 40,
                             ),
                             Text(
-                              "Study",
+                              "Cleaning",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold
@@ -250,12 +333,12 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
-                              Icons.mode_of_travel_outlined,
+                              Icons.food_bank_outlined,
                               color: Colors.white,
                               size: 40,
                             ),
                             Text(
-                              "travel",
+                              "Cooking",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold
@@ -282,12 +365,12 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
-                              Icons.yard_outlined,
+                              Icons.shopping_cart_outlined,
                               color: Colors.white,
                               size: 40,
                             ),
                             Text(
-                              "Gym OR Yoga",
+                              "Shopping",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold
@@ -309,7 +392,7 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
                               size: 40,
                             ),
                             Text(
-                              "Party",
+                              "Creative",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold
@@ -326,12 +409,12 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
-                              Icons.mode_of_travel_outlined,
+                              Icons.book_outlined,
                               color: Colors.white,
                               size: 40,
                             ),
                             Text(
-                              "travel",
+                              "Reading",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold
@@ -348,12 +431,12 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
-                              Icons.mode_of_travel_outlined,
+                              Icons.mode_edit_outlined,
                               color: Colors.white,
                               size: 40,
                             ),
                             Text(
-                              "travel",
+                              "Writing",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold
@@ -366,7 +449,7 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
                   ],
                 ),
               ),
-            ),  
+            ), 
           ],
         ),
       ),
