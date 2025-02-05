@@ -27,8 +27,8 @@ class _TodaysMoodState extends State<TodaysMood> {
           backgroundColor: Color(0xff1f1835),
           bottom: TabBar(
             tabs: [
-              Tab(text: "Home"),
-              Tab(text: "Profile"),
+              Tab(text: "Write About You"),
+              Tab(text: "Your Fellings"),
             ],
           ),
         ),

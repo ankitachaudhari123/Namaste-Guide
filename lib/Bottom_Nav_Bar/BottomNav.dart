@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:namaste_guide/todays_mood.dart';
-import 'home_page.dart';
-import 'profile_page.dart';
+import 'package:namaste_guide/Mood/todays_mood.dart';
+import '../Exercise/home_page.dart';
+import '../Profile/profile_page.dart';
 
 class BottomNavPage extends StatefulWidget {
   @override

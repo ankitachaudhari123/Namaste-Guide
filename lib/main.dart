@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:namaste_guide/BottomNav.dart';
+import 'package:namaste_guide/Bottom_Nav_Bar/BottomNav.dart';
 
 
 void main() {

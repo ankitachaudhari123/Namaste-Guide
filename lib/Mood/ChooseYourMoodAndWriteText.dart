@@ -104,7 +104,7 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
-                              Icons.assignment_late_outlined,
+                              Icons.brightness_auto_sharp,
                               color: Colors.white,
                               size: 40,
                             ),
@@ -449,7 +449,7 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
                   ],
                 ),
               ),
-            ), 
+            ),
           ],
         ),
       ),
