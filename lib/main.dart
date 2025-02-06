@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:namaste_guide/Bottom_Nav_Bar/BottomNav.dart';
 
+import 'User_Info/SingnUp.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +19,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: BottomNavPage(),
+      // home: BottomNavPage(),
+      home: SingnUp(),
     );
   }
 }

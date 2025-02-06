@@ -241,45 +241,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ],
                     ),
                 ),
-             ),
-             Padding(
-               padding: const EdgeInsets.only(left: 10, right: 10),
-               child: Container(
-                  width: double.infinity,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                   gradient: const LinearGradient(
-                            colors: [Color(0xff7c49de), Color(0xffdcb383)],
-                            begin: Alignment.bottomLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                  ),
-                  child: Row(
-                      children: [
-                        Container(
-                         width: 60,
-                         child: Icon(
-                          Icons.login,
-                              color: Colors.white,
-                              size: 30,
-                         ),
-                        ),
-                        Container(
-                          width: 280,
-                          child: Text(
-                            "Logout",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20
-                            ),
-                            ),
-                        ),
-                      ],
-                    ),
-                ),
-             ),
+             ),  
           ],
         ),
       ),
