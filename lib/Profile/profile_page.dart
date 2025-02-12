@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
+import 'ChangeUserName.dart';
+import 'YourInfo.dart';
+import 'changeWeightAndHeight.dart';
+
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
@@ -54,6 +58,13 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             Padding(
               padding: const EdgeInsets.all(10),
+              child:GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const ChangeUserName()),
+                  );
+                },
               child: Container(
                   width: double.infinity,
                   height: 50,
@@ -88,48 +99,19 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ],
                     ),
+                )
                 ),
             ),
              Padding(
-               padding: const EdgeInsets.only(left: 10, right: 10),
-               child: Container(
-                  width: double.infinity,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    gradient: const LinearGradient(
-                            colors: [Color(0xff7c49de), Color(0xffdcb383)],
-                            begin: Alignment.bottomLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                  ),
-                  child: Row(
-                      children: [
-                        Container(
-                         width: 60,
-                         child: Icon(
-                          Icons.lock_outlined,
-                              color: Colors.white,
-                              size: 30,
-                         ),
-                        ),
-                        Container(
-                          width: 280,
-                          child: Text(
-                            "Chnage Password",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20
-                            ),
-                            ),
-                        ),
-                      ],
-                    ),
-                ),
-             ),
-             Padding(
-               padding: const EdgeInsets.all(10),
+               padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+
+               child:GestureDetector(
+                onTap: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const ChangeHightWeight()),
+                  );
+                },
                child: Container(
                   width: double.infinity,
                   height: 50,
@@ -165,19 +147,27 @@ class _ProfilePageState extends State<ProfilePage> {
                       ],
                     ),
                 ),
+ ),
              ),
              Padding(
                padding: const EdgeInsets.only(left: 10, right: 10),
+               child:GestureDetector(
+                onTap: (){
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const YourInfo()),
+                  );
+                },
                child: Container(
                   width: double.infinity,
                   height: 50,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     gradient: const LinearGradient(
-                            colors: [Color(0xff7c49de), Color(0xffdcb383)],
-                            begin: Alignment.bottomLeft,
-                            end: Alignment.bottomRight,
-                          ),
+                      colors: [Color(0xff7c49de), Color(0xffdcb383)],
+                      begin: Alignment.bottomLeft,
+                      end: Alignment.bottomRight,
+                    ),
                   ),
                   child: Row(
                       children: [
@@ -192,7 +182,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         Container(
                           width: 280,
                           child: Text(
-                            "Your Heath Info",
+                            "Your Info",
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
@@ -203,6 +193,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       ],
                     ),
                 ),
+
+),
+
              ),
              Padding(
                padding: const EdgeInsets.all(10),
