@@ -1,8 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-
-// import 'breathing_expercise.dart';
+import 'package:http/http.dart' as http;
 import 'expersics.dart';
 
 class HomePage extends StatefulWidget {
@@ -11,13 +9,40 @@ class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
 }
+
 class _HomePageState extends State<HomePage> {
+  List yogaplanlist = [];
+
+  Future<void> yogaplans() async {
+    String uri = "http://192.168.1.35/namaste_guide_api/feach_yoga_plans.php";
+
+    try {
+      var response = await http.get(Uri.parse(uri));
+
+      if (response.statusCode == 200) {
+        setState(() {
+          yogaplanlist = jsonDecode(response.body);
+        });
+      } else {
+        print("Error: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("Exception: $e");
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    yogaplans();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("All Plans"),
-        backgroundColor: Color(0xff1f1835),
+        title: const Text("All Plans"),
+        backgroundColor: const Color(0xff1f1835),
       ),
       body: Container(
         width: double.infinity,
@@ -29,19 +54,21 @@ class _HomePageState extends State<HomePage> {
             children: [
               Expanded(
                 child: ListView.builder(
-                  itemCount: 3,
+                  itemCount: yogaplanlist.isNotEmpty ? yogaplanlist.length : 0,
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const Breathing_expercise()), // Replace Placeholder with the correct widget
+                          MaterialPageRoute(
+                              builder: (context) => const Breathing_expercise()),
                         );
                       },
                       child: Container(
                         width: double.infinity,
                         height: 185,
-                        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 10),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           gradient: const LinearGradient(
@@ -54,10 +81,11 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             Container(
                               width: 170,
-                              padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 20),
-                              child: const Text(
-                                "Breathing Exercise",
-                                style: TextStyle(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 60, horizontal: 20),
+                              child: Text(
+                                yogaplanlist[index]['yoga_plan_name'] ?? "No Name",
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 25,
                                   fontWeight: FontWeight.bold,
@@ -66,9 +94,11 @@ class _HomePageState extends State<HomePage> {
                             ),
                             Expanded(
                               child: Container(
-                                decoration: const BoxDecoration(
+                                decoration: BoxDecoration(
                                   image: DecorationImage(
-                                    image: AssetImage('asset/breathing_expercise.png'),
+                                    image: AssetImage(
+                                      'asset/${yogaplanlist[index]['yoga_plan_image'] ?? 'default_image.png'}',
+                                    ),
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -84,7 +114,7 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-      ), 
+      ),
     );
   }
 }
