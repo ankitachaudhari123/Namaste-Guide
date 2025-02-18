@@ -1,29 +1,65 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
-
 import 'expercise_desc.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 
 class Breathing_expercise extends StatefulWidget {
-  const Breathing_expercise({super.key});
+  final String yogaPlanId;
+  const Breathing_expercise({super.key , required this.yogaPlanId});
 
   @override
   State<Breathing_expercise> createState() => _Breathing_experciseState();
 }
 
 class _Breathing_experciseState extends State<Breathing_expercise> {
+  List exerciselist = [];
+
+Future<void> fetchExerciseList() async {  
+  String uri = "http://192.168.1.34/namaste_guide_api/feach_exercise.php";
+
+  try {
+    var response = await http.post(
+      Uri.parse(uri),
+       body: {
+          'yoga_plan_id': widget.yogaPlanId, // Send yoga_plan_id to backend
+        },
+    );
+
+    if (response.statusCode == 200) {
+      setState(() {
+        exerciselist = jsonDecode(response.body);
+        print("this is exercise listttttt ${exerciselist}");
+      });
+    } else {
+      print("Error: ${response.statusCode}");
+    }
+  } catch (e) {
+    print("Exception: $e");
+  }
+}
+
+@override
+void initState() {
+  super.initState();
+  fetchExerciseList(); 
+}
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Brething Expercise"),
+        title: Text("Brething Exercise"),
         backgroundColor: Color(0xff1f1835),
       ),
       body: Container(
         width: double.infinity,
         color: Color(0xff1f1835),
         child: ListView.builder(
-          itemCount: 3,
+          itemCount: exerciselist.isNotEmpty ? exerciselist.length : 0,
           itemBuilder: ( context, int index) {
             return GestureDetector(
               onTap: (){
@@ -51,9 +87,10 @@ class _Breathing_experciseState extends State<Breathing_expercise> {
                         child: Container(
                           width: 80,
                           decoration: BoxDecoration(
-                            color: Colors.amber,
+                            image: DecorationImage(
+                              image: AssetImage('asset/${exerciselist[index]['exercise_cover_img']??'default_image.png'}')),
                             border: Border.all(
-                              color: Colors.black,
+                              color: Colors.white,
                               width: 2
                             ),
                             borderRadius: BorderRadius.circular(50)
@@ -64,7 +101,7 @@ class _Breathing_experciseState extends State<Breathing_expercise> {
                         width:230,
                         // color: Colors.green,
                         child: Text(
-                          "Diaphragmatic Breathing",
+                          exerciselist[index]['exercise_name'] ?? "No Name",
                           style:TextStyle(
                             color: Colors.white,
                             fontSize: 18,

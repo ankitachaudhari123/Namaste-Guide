@@ -5,6 +5,7 @@ import 'expersics.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
+  
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -14,14 +15,18 @@ class _HomePageState extends State<HomePage> {
   List yogaplanlist = [];
 
   Future<void> yogaplans() async {
-    String uri = "http://192.168.1.35/namaste_guide_api/feach_yoga_plans.php";
+    String uri = "http://192.168.1.34/namaste_guide_api/feach_yoga_plans.php";
 
     try {
-      var response = await http.get(Uri.parse(uri));
+      var response = await http.post(
+        Uri.parse(uri),
+        );
+      
 
       if (response.statusCode == 200) {
         setState(() {
           yogaplanlist = jsonDecode(response.body);
+          print(yogaplanlist);
         });
       } else {
         print("Error: ${response.statusCode}");
@@ -58,10 +63,14 @@ class _HomePageState extends State<HomePage> {
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
+                        String yogaPlanId = yogaplanlist[index]['yoga_plan_id'].toString();
+                        print("Selected yogaPlanId: $yogaPlanId");
+                        
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const Breathing_expercise()),
+                            builder: (context) => Breathing_expercise(yogaPlanId: yogaPlanId),
+                          ),
                         );
                       },
                       child: Container(
