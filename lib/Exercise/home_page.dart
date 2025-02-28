@@ -15,7 +15,7 @@ class _HomePageState extends State<HomePage> {
   List yogaplanlist = [];
 
   Future<void> yogaplans() async {
-    String uri = "http://192.168.1.36/namaste_guide_api/feach_yoga_plans.php";
+    String uri = "http://192.168.1.34/namaste_guide_api/feach_yoga_plans.php";
 
     try {
       var response = await http.post(

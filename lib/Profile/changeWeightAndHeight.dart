@@ -29,8 +29,8 @@ class _ChangeHightWeightState extends State<ChangeHightWeight> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      _buildTextField("Change Weight"),
-                      _buildTextField("Change Height"),
+                      _buildTextField("Change Weight in kilograms"),
+                      _buildTextField("Change Height in meters"),
                     ],
                   ),
                 ),

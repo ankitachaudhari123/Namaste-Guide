@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
-
+import '../User_Info/SingnUp.dart';
 import 'ChangeUserName.dart';
 import 'YourInfo.dart';
 import 'changeWeightAndHeight.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -14,6 +15,43 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+   Future<void> _deleteAccount(BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('user_email'); // Remove stored email
+
+    print("Stored email deleted"); // Debugging purpose
+
+    // Navigate to SignUp and remove previous screens from stack
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const SignUp()),
+      (route) => false, // Removes all previous routes
+    );
+  }
+
+  // Show confirmation dialog before deleting account
+  void _showDeleteDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Delete Account"),
+        content: const Text("Are you sure you want to delete your account? This action cannot be undone."),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context), // Close dialog
+            child: const Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context); // Close dialog
+              _deleteAccount(context); // Delete account
+            },
+            child: const Text("Delete", style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -197,44 +235,43 @@ class _ProfilePageState extends State<ProfilePage> {
 ),
 
              ),
-             Padding(
-               padding: const EdgeInsets.all(10),
-               child: Container(
+              Padding(
+              padding: const EdgeInsets.all(10),
+              child: GestureDetector(
+                onTap: _showDeleteDialog, // Show confirmation dialog
+                child: Container(
                   width: double.infinity,
                   height: 50,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     gradient: const LinearGradient(
-                            colors: [Color(0xff7c49de), Color(0xffdcb383)],
-                            begin: Alignment.bottomLeft,
-                            end: Alignment.bottomRight,
-                          ),
+                      colors: [Color(0xff7c49de), Color(0xffdcb383)],
+                      begin: Alignment.bottomLeft,
+                      end: Alignment.bottomRight,
+                    ),
                   ),
                   child: Row(
-                      children: [
-                        Container(
-                         width: 60,
-                         child: Icon(
-                          Icons.delete_outline_outlined,
-                              color: Colors.white,
-                              size: 30,
-                         ),
+                    children: [
+                      const SizedBox(width: 15),
+                      const Icon(
+                        Icons.delete_outline_outlined,
+                        color: Colors.white,
+                        size: 30,
+                      ),
+                      const SizedBox(width: 14),
+                      const Text(
+                        "Delete Account",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
                         ),
-                        Container(
-                          width: 280,
-                          child: Text(
-                            "Delete Account",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20
-                            ),
-                            ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
+                  ),
                 ),
-             ),  
+              ),
+            ),
           ],
         ),
       ),

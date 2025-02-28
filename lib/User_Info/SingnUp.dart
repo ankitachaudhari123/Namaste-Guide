@@ -1,99 +1,297 @@
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
 
-class SingnUp extends StatefulWidget {
-  const SingnUp({super.key});
+// class SignUp extends StatefulWidget {
+//   const SignUp({super.key});
+
+//   @override
+//   State<SignUp> createState() => _SignUpState();
+// }
+
+// class _SignUpState extends State<SignUp> {
+//   final TextEditingController _nameController = TextEditingController();
+//   final TextEditingController _emailController = TextEditingController();
+//   final TextEditingController _heightController = TextEditingController();
+//   final TextEditingController _weightController = TextEditingController();
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: SafeArea(
+//         child: Container(
+//           width: double.infinity,
+//           padding: const EdgeInsets.symmetric(horizontal: 20),
+//           decoration: const BoxDecoration(
+//             gradient: LinearGradient(
+//               colors: [Color(0xff1f1835), Color(0xff2c2545)],
+//               begin: Alignment.topCenter,
+//               end: Alignment.bottomCenter,
+//             ),
+//           ),
+//           child: Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: [
+//               const SizedBox(height: 40),
+//               const Text(
+//                 "Create Your Profile",
+//                 style: TextStyle(
+//                   color: Colors.white,
+//                   fontSize: 28,
+//                   fontWeight: FontWeight.bold,
+//                 ),
+//               ),
+//               const SizedBox(height: 20),
+//               Expanded(
+//                 child: SingleChildScrollView(
+//                   child: Column(
+//                     children: [
+//                       _buildTextField("Your Name", _nameController),
+//                       _buildTextField("Email ID", _emailController),
+//                       _buildTextField("Height in meters", _heightController),
+//                       _buildTextField("Weight in kilograms", _weightController),
+//                     ],
+//                   ),
+//                 ),
+//               ),
+//               const SizedBox(height: 20),
+//               GestureDetector(
+//                 onTap: () {},
+//                 child: Container(
+//                   width: double.infinity,
+//                   padding: const EdgeInsets.symmetric(vertical: 15),
+//                   decoration: BoxDecoration(
+//                     gradient: const LinearGradient(
+//                       colors: [Color(0xff7c49de), Color(0xffdcb383)],
+//                       begin: Alignment.topLeft,
+//                       end: Alignment.bottomRight,
+//                     ),
+//                     borderRadius: BorderRadius.circular(12),
+//                     boxShadow: [
+//                       BoxShadow(
+//                         color: Color(0xff1f1835),
+//                         blurRadius: 6,
+//                         offset: const Offset(0, 3),
+//                       ),
+//                     ],
+//                   ),
+//                   alignment: Alignment.center,
+//                   child: const Text(
+//                     "Sign Up",
+//                     style: TextStyle(
+//                       fontSize: 18,
+//                       color: Colors.white,
+//                       fontWeight: FontWeight.bold,
+//                     ),
+//                   ),
+//                 ),
+//               ),
+//               const SizedBox(height: 40),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+
+//   Widget _buildTextField(String label, TextEditingController controller) {
+//     return Padding(
+//       padding: const EdgeInsets.symmetric(vertical: 10),
+//       child: TextField(
+//         controller: controller,
+//         style: const TextStyle(color: Colors.white),
+//         decoration: InputDecoration(
+//           labelText: label,
+//           labelStyle: const TextStyle(color: Colors.white70),
+//           filled: true,
+//           fillColor: Colors.white.withOpacity(0.1),
+//           enabledBorder: OutlineInputBorder(
+//             borderSide: const BorderSide(color: Colors.white38, width: 1.5),
+//             borderRadius: BorderRadius.circular(12),
+//           ),
+//           focusedBorder: OutlineInputBorder(
+//             borderSide: const BorderSide(color: Colors.white, width: 2),
+//             borderRadius: BorderRadius.circular(12),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import '../Bottom_Nav_Bar/BottomNav.dart';
+
+class SignUp extends StatefulWidget {
+  const SignUp({super.key});
 
   @override
-  State<SingnUp> createState() => _SingnUpState();
+  State<SignUp> createState() => _SignUpState();
 }
 
-class _SingnUpState extends State<SingnUp> {
+class _SignUpState extends State<SignUp> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _heightController = TextEditingController();
+  final TextEditingController _weightController = TextEditingController();
+
+  Future<void> _signUp() async {
+  String name = _nameController.text.trim();
+  String email = _emailController.text.trim();
+  String height = _heightController.text.trim();
+  String weight = _weightController.text.trim();
+
+  var url = Uri.parse("http://192.168.1.34/namaste_guide_api/insert_user_info.php");
+
+  try {
+    var response = await http.post(
+      url,
+      body: jsonEncode({
+        'name': name,
+        'email': email,
+        'height': height,
+        'weight': weight,
+      }),
+      headers: {"Content-Type": "application/json"},
+    );
+
+    var responseData = jsonDecode(response.body);
+
+    if (response.statusCode == 200 && responseData["status"] == "success") {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('user_email', email);
+
+      print("Stored Email: $email");
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => BottomNavPage()),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(responseData["message"])),
+      );
+    }
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Error: $e")),
+    );
+  }
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Container(
           width: double.infinity,
-          height: double.infinity,
-          color: Color(0xff1f1835),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xff1f1835), Color(0xff2c2545)],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 40),
-                child: Text(
-                  "Create Your Profile",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold),
+              const SizedBox(height: 40),
+              const Text(
+                "Create Your Profile",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 40),
+              const SizedBox(height: 20),
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      _buildTextField("Your Name"),
-                      _buildTextField("Email ID"),
-                      _buildTextField("Height"),
-                      _buildTextField("Weight"),
+                      _buildTextField("Your Name", _nameController),
+                      _buildTextField("Email ID", _emailController),
+                      _buildTextField("Height in meters", _heightController),
+                      _buildTextField("Weight in kilograms", _weightController),
                     ],
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: GestureDetector(
-                  onTap: () {
-                  },
-                  child: Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(vertical: 15),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                         colors: [Color(0xff7c49de), Color(0xffdcb383)],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(10),
+              const SizedBox(height: 20),
+              GestureDetector(
+                onTap: _signUp,
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [Color(0xff7c49de), Color(0xffdcb383)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
                     ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      "Sign Up",
-                      style: TextStyle(fontSize: 18, color: Colors.white),
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color(0xff1f1835),
+                        blurRadius: 6,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  alignment: Alignment.center,
+                  child: const Text(
+                    "Sign Up",
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
               ),
+              const SizedBox(height: 40),
             ],
           ),
         ),
       ),
     );
-  } 
+  }
 
-
-
-
-
-  Widget _buildTextField(String label) {
+  Widget _buildTextField(String label, TextEditingController controller) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: TextField(
-        style: TextStyle(color: Colors.white),
+        controller: controller,
+        style: const TextStyle(color: Colors.white),
         decoration: InputDecoration(
           labelText: label,
-          labelStyle: TextStyle(color: Colors.white),
+          labelStyle: const TextStyle(color: Colors.white70),
+          filled: true,
+          fillColor: Colors.white.withOpacity(0.1),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white, width: 2.0),
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide: const BorderSide(color: Colors.white38, width: 1.5),
+            borderRadius: BorderRadius.circular(12),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white, width: 2.0),
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide: const BorderSide(color: Colors.white, width: 2),
+            borderRadius: BorderRadius.circular(12),
           ),
         ),
       ),
     );
   }
 }
+

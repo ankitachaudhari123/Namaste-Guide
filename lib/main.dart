@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:namaste_guide/Bottom_Nav_Bar/BottomNav.dart';
 
+import 'SplashScreen.dart';
 import 'User_Info/SingnUp.dart';
 
 
@@ -19,8 +20,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: BottomNavPage(),
-      // home: SingnUp(),
+      // home: BottomNavPage(),
+      home: SplashScreen(),
     );
   }
 }
