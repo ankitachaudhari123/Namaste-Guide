@@ -1,76 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import '../Bottom_Nav_Bar/BottomNav.dart';
-import 'DialogBox.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/src/widgets/placeholder.dart';
 
-class SignUp extends StatefulWidget {
-  const SignUp({super.key});
+class EditInfo extends StatefulWidget {
+  const EditInfo({super.key});
 
   @override
-  State<SignUp> createState() => _SignUpState();
+  State<EditInfo> createState() => _EditInfoState();
 }
 
-class _SignUpState extends State<SignUp> {
+class _EditInfoState extends State<EditInfo> {
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _heightController = TextEditingController();
   final TextEditingController _weightController = TextEditingController();
-
-  Future<void> _signUp() async {
-  String name = _nameController.text.trim();
-  String email = _emailController.text.trim();
-  String height = _heightController.text.trim();
-  String weight = _weightController.text.trim();
-
-  var url = Uri.parse("http://192.168.43.50/namaste_guide_api/insert_user_info.php");
-
-  try {
-    var response = await http.post(
-      url,
-      body: jsonEncode({
-        'name': name,
-        'email': email,
-        'height': height,
-        'weight': weight,
-      }),
-      headers: {"Content-Type": "application/json"},
-    );
-
-    var responseData = jsonDecode(response.body);
-
-     if (response.statusCode == 200) {
-        if (responseData["status"] == "success") {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          await prefs.setString('user_email', email);
-
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => BottomNavPage()),
-          );
-        } else if (responseData["message"] == "You already have account") {
-          print("Dialog should appear now!");
-          showAlreadyHaveAccountDialog(context);
-          }
-          else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(responseData["message"])),
-          );
-        }
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Server Error! Please try again later.")),
-        );
-      }
-  } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Error: $e")),
-    );
-  }
-}
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +46,6 @@ class _SignUpState extends State<SignUp> {
                   child: Column(
                     children: [
                       _buildTextField("Your Name", _nameController),
-                      _buildTextField("Email ID", _emailController),
                       _buildTextField("Height in meters", _heightController),
                       _buildTextField("Weight in kilograms", _weightController),
                     ],
@@ -113,7 +54,6 @@ class _SignUpState extends State<SignUp> {
               ),
               const SizedBox(height: 20),
               GestureDetector(
-                onTap: _signUp,
                 child: Container(
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(vertical: 15),

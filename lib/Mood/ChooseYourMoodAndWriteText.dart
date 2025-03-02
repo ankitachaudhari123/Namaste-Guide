@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import '../Bottom_Nav_Bar/BottomNav.dart';
 
 class ChooseYourMood extends StatefulWidget {
   const ChooseYourMood({super.key});
@@ -9,20 +13,98 @@ class ChooseYourMood extends StatefulWidget {
 
 class _ChooseYourMoodState extends State<ChooseYourMood> {
   String selectedMood = "Happy";
+  String email = "";
+  final TextEditingController feelingsController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _checkUser();
+  }
+
+  Future<void> _checkUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? storedEmail = prefs.getString('user_email'); // Fetch email from SharedPreferences
+
+    setState(() {
+      email = storedEmail ?? ""; // Ensure the email is properly assigned
+    });
+
+    print("Retrieved email from SharedPreferences: $email"); // Debugging
+  }
 
   void toggleMood(String mood) {
     setState(() {
-      selectedMood = selectedMood == mood ? "" : mood;
+      selectedMood = (selectedMood == mood) ? "" : mood;
     });
+  }
+
+  Future<void> insertMood() async {
+    String feelings = feelingsController.text.trim();
+
+    if (email.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Email is missing! Please log in again.")),
+      );
+      return;
+    }
+
+    if (selectedMood.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please select a mood!")),
+      );
+      return;
+    }
+
+    var url = Uri.parse("http://192.168.43.50/namaste_guide_api/insert_your_mood.php");
+
+    try {
+    var response = await http.post(
+  url,
+  body: jsonEncode({
+    'email_id': email, 
+    'mood': selectedMood, 
+    'feelings': feelings,      
+  }),
+  headers: {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+  },
+);
+
+      var responseData = jsonDecode(response.body);
+      print("Response: ${response.body}"); // Debugging
+
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(responseData["message"])),
+        );
+
+        if (responseData["status"] == "success") {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => BottomNavPage()),
+          );
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Server Error! Please try again later.")),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: $e")),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xff1f1835),
+      backgroundColor: const Color(0xff1f1835),
       body: SafeArea(
         child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Padding(
             padding: const EdgeInsets.all(10),
@@ -30,6 +112,7 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextField(
+                  controller: feelingsController,
                   style: const TextStyle(color: Colors.white),
                   decoration: const InputDecoration(
                     labelText: 'Enter Your Feelings',
@@ -74,14 +157,12 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
 
                 /// Add Mood Button
                 GestureDetector(
-                  onTap: () {
-                    print("Selected Mood: $selectedMood");
-                  },
+                  onTap: insertMood,
                   child: Container(
                     width: double.infinity,
-                    padding: EdgeInsets.symmetric(vertical: 15),
+                    padding: const EdgeInsets.symmetric(vertical: 15),
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
+                      gradient: const LinearGradient(
                         colors: [Color(0xff7c49de), Color(0xffdcb383)],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
@@ -89,7 +170,7 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     alignment: Alignment.center,
-                    child: Text(
+                    child: const Text(
                       "Add Mood",
                       style: TextStyle(fontSize: 18, color: Colors.white),
                     ),
@@ -121,28 +202,29 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
       child: GestureDetector(
         onTap: () => toggleMood(mood),
         child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 5),
-          padding: EdgeInsets.all(10),
+          margin: const EdgeInsets.symmetric(horizontal: 5),
+          padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             gradient: isSelected
-                ? LinearGradient(
+                ? const LinearGradient(
                     colors: [Color(0xff7c49de), Color(0xffdcb383)],
                     begin: Alignment.bottomLeft,
                     end: Alignment.bottomRight,
                   )
                 : null,
-            color: isSelected ? null : Color(0xff1f1835),
+            color: isSelected ? null : const Color(0xff1f1835),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(icon, color: Colors.white, size: 40),
-              SizedBox(height: 5),
+              const SizedBox(height: 5),
               Text(
                 mood,
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
+                style: const TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
               ),
             ],
           ),

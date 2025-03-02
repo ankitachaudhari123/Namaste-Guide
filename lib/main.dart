@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:namaste_guide/Bottom_Nav_Bar/BottomNav.dart';
 
 import 'SplashScreen.dart';
+import 'User_Info/EditSingnUpInfo.dart';
 import 'User_Info/SingnUp.dart';
 
 
@@ -22,6 +23,10 @@ class MyApp extends StatelessWidget {
       ),
       // home: BottomNavPage(),
       home: SplashScreen(),
+      routes: {
+      'editProfile': (context) => EditInfo(), // Route for Edit Info page
+      'HomePage': (context) => BottomNavPage(), // Route for Login page
+    },
     );
   }
 }
