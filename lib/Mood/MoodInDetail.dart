@@ -1,83 +1,102 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class MoodInDetail extends StatefulWidget {
-  const MoodInDetail({super.key});
+  final String MoodId;
+  const MoodInDetail({super.key, required this.MoodId});
 
   @override
   State<MoodInDetail> createState() => _MoodInDetailState();
 }
 
 class _MoodInDetailState extends State<MoodInDetail> {
+  List moodinfo = [];
+  bool isLoading = true; // Added to track loading state
+
+  @override
+  void initState() {
+    super.initState();
+    fetchmoodinfo();
+  }
+
+  Future<void> fetchmoodinfo() async {
+    String uri = "http://192.168.1.36/namaste_guide_api/feach_mood_desc.php";
+
+    try {
+      var response = await http.post(
+        Uri.parse(uri),
+        body: {'mood_id': widget.MoodId},
+      );
+
+      if (response.statusCode == 200) {
+        List data = jsonDecode(response.body);
+        print("mood list: $data");
+
+        setState(() {
+          moodinfo = data; // Update moodinfo
+          isLoading = false;
+        });
+      } else {
+        print("Error: ${response.statusCode}");
+        setState(() {
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      print("Exception: $e");
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Your Fellings"),
-        backgroundColor: Color(0xff1f1835),
+        title: const Text("Your Feelings"),
+        backgroundColor: const Color(0xff1f1835),
       ),
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        color: Color(0xff1f1835),
+        color: const Color(0xff1f1835),
         child: Padding(
           padding: const EdgeInsets.all(10),
-          child: Column(
-            children: [
-              Container(
-                width: double.infinity,
-                child: Text(
-                  "Mood : Happy",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20
-                  ),
-                ),
-              ),
-              SizedBox(height: 10),
-              Container(
-                width: double.infinity,
-                child: Text(
-                  "Time : 10:10 Am",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20
-                  ),
-                ),
-              ),
-              SizedBox(height: 10),
-              Container(
-                width:double.infinity,
-                child: Row(
-                  children: [
-                    Container(
-                      width: 130,
+          child: isLoading
+              ? const Center(child: CircularProgressIndicator()) // Show loading
+              : moodinfo.isEmpty
+                  ? const Center(
                       child: Text(
-                        "Your Fellings : ",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20
-                        ),
+                        "No mood data available",
+                        style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
-                    ),
-                    Container(
-                      width: 210,
-                      child: Text(
-                        "todays my mood is so happy because ....... is a special incedant in my life.",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
+                    )
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Mood: ${moodinfo[0]['mood']}",
+                          style: const TextStyle(color: Colors.white, fontSize: 20),
                         ),
-                        softWrap: true,
-                        overflow: TextOverflow.visible,
-                      ),
+                        const SizedBox(height: 10),
+                        Text(
+                          "Time: ${moodinfo[0]['time']}",
+                          style: const TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          "Date: ${moodinfo[0]['date']}",
+                          style: const TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          "Your Feelings: ${moodinfo[0]['fellings']}",
+                          style: const TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              )
-            ],
-          ),
         ),
       ),
     );

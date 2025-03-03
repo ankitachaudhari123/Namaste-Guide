@@ -72,6 +72,7 @@ class _ListOfMoodsState extends State<ListOfMoods> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -139,9 +140,12 @@ class _ListOfMoodsState extends State<ListOfMoods> {
     }
                             return GestureDetector(
                               onTap: () {
+                                String moodId = moodlist[index]['mood_id'].toString();
+
+                                print("mood id :$moodId");
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => const MoodInDetail()),
+                                  MaterialPageRoute(builder: (context) => MoodInDetail(MoodId: moodId)),
                                 );
                               },
                               child: Padding(
