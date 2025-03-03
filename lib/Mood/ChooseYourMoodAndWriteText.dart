@@ -56,7 +56,7 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
       return;
     }
 
-    var url = Uri.parse("http://192.168.43.50/namaste_guide_api/insert_your_mood.php");
+    var url = Uri.parse("http://192.168.1.36/namaste_guide_api/insert_your_mood.php");
 
     try {
     var response = await http.post(
@@ -130,26 +130,26 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
                 /// Mood Selection Grid
                 _buildMoodRow([
                   _buildMoodTile("Happy", Icons.emoji_emotions_outlined),
-                  _buildMoodTile("Sad", Icons.water_drop_rounded),
-                  _buildMoodTile("Angry", Icons.brightness_auto_sharp),
-                  _buildMoodTile("Sleepy", Icons.airline_seat_flat),
+                  _buildMoodTile("Sad", Icons.sentiment_dissatisfied),
+                  _buildMoodTile("Angry", Icons.sentiment_very_dissatisfied ),
+                  _buildMoodTile("Sleepy", Icons.hotel),
                 ]),
                 _buildMoodRow([
                   _buildMoodTile("Speak to Someone", Icons.call),
                   _buildMoodTile("Work", Icons.work_outline),
                   _buildMoodTile("Study", Icons.computer),
-                  _buildMoodTile("Gym & Yoga", Icons.yard_outlined),
+                  _buildMoodTile("Gym & Yoga", Icons.self_improvement ),
                 ]),
                 _buildMoodRow([
-                  _buildMoodTile("Party", Icons.party_mode_outlined),
+                  _buildMoodTile("Party", Icons.celebration ),
                   _buildMoodTile("Travel", Icons.travel_explore_rounded),
-                  _buildMoodTile("Cleaning", Icons.clean_hands_outlined),
+                  _buildMoodTile("Cleaning", Icons.cleaning_services ),
                   _buildMoodTile("Cooking", Icons.food_bank_outlined),
                 ]),
                 _buildMoodRow([
                   _buildMoodTile("Shopping", Icons.shopping_cart_outlined),
-                  _buildMoodTile("Creative", Icons.palette_outlined),
-                  _buildMoodTile("Reading", Icons.book_outlined),
+                  _buildMoodTile("Creative", Icons.brush ),
+                  _buildMoodTile("Reading", Icons.menu_book ),
                   _buildMoodTile("Writing", Icons.mode_edit_outlined),
                 ]),
 

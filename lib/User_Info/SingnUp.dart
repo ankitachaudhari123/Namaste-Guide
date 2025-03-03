@@ -24,7 +24,7 @@ class _SignUpState extends State<SignUp> {
   String height = _heightController.text.trim();
   String weight = _weightController.text.trim();
 
-  var url = Uri.parse("http://192.168.43.50/namaste_guide_api/insert_user_info.php");
+  var url = Uri.parse("http://192.168.1.36/namaste_guide_api/insert_user_info.php");
 
   try {
     var response = await http.post(

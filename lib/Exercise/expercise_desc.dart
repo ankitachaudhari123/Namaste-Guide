@@ -15,7 +15,7 @@ class _ExperciseDescState extends State<ExperciseDesc> {
   bool isLoading = true; // Track loading state
 
   Future<void> funfeachexerciseinfo() async {
-    String uri = "http://192.168.43.50/namaste_guide_api/feach_info_of_exercise.php";
+    String uri = "http://192.168.1.36/namaste_guide_api/feach_info_of_exercise.php";
     try {
       var response = await http.post(
         Uri.parse(uri),
