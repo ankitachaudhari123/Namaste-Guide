@@ -1,103 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
-import '../Bottom_Nav_Bar/BottomNav.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/src/widgets/placeholder.dart';
 
-class ChooseYourMood extends StatefulWidget {
-  const ChooseYourMood({super.key});
+class UpdateMoodDetails extends StatefulWidget {
+  const UpdateMoodDetails({super.key});
 
   @override
-  State<ChooseYourMood> createState() => _ChooseYourMoodState();
+  State<UpdateMoodDetails> createState() => _UpdateMoodDetailsState();
 }
 
-class _ChooseYourMoodState extends State<ChooseYourMood> {
-  String selectedMood = "Happy";
-  String email = "";
-  final TextEditingController feelingsController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    _checkUser();
-  }
-
-  Future<void> _checkUser() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? storedEmail = prefs.getString('user_email'); // Fetch email from SharedPreferences
-
-    setState(() {
-      email = storedEmail ?? ""; // Ensure the email is properly assigned
-    });
-
-    print("Retrieved email from SharedPreferences: $email"); // Debugging
-  }
-
-  void toggleMood(String mood) {
-    setState(() {
-      selectedMood = (selectedMood == mood) ? "" : mood;
-    });
-  }
-
-  Future<void> insertMood() async {
-    String feelings = feelingsController.text.trim();
-
-    if (email.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Email is missing! Please log in again.")),
-      );
-      return;
-    }
-
-    if (selectedMood.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please select a mood!")),
-      );
-      return;
-    }
-
-    var url = Uri.parse("http://192.168.1.48/namaste_guide_api/insert_your_mood.php");
-
-    try {
-    var response = await http.post(
-  url,
-  body: jsonEncode({
-    'email_id': email, 
-    'mood': selectedMood, 
-    'feelings': feelings,      
-  }),
-  headers: {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-  },
-);
-
-      var responseData = jsonDecode(response.body);
-      print("Response: ${response.body}"); // Debugging
-
-      if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(responseData["message"])),
-        );
-
-        if (responseData["status"] == "success") {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => BottomNavPage()),
-          );
-        }
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Server Error! Please try again later.")),
-        );
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error: $e")),
-      );
-    }
-  }
-
+class _UpdateMoodDetailsState extends State<UpdateMoodDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,7 +24,7 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextField(
-                  controller: feelingsController,
+                  // controller: feelingsController,
                   style: const TextStyle(color: Colors.white),
                   decoration: const InputDecoration(
                     labelText: 'Enter Your Feelings',
@@ -157,7 +69,7 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
 
                 /// Add Mood Button
                 GestureDetector(
-                  onTap: insertMood,
+                  // onTap: insertMood,
                   child: Container(
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(vertical: 15),
@@ -197,23 +109,23 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
 
   /// Builds an individual mood tile
   Widget _buildMoodTile(String mood, IconData icon) {
-    bool isSelected = selectedMood == mood;
+    // bool isSelected = selectedMood == mood;
     return Expanded(
       child: GestureDetector(
-        onTap: () => toggleMood(mood),
+        // onTap: () => toggleMood(mood),
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 5),
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            gradient: isSelected
-                ? const LinearGradient(
-                    colors: [Color(0xff7c49de), Color(0xffdcb383)],
-                    begin: Alignment.bottomLeft,
-                    end: Alignment.bottomRight,
-                  )
-                : null,
-            color: isSelected ? null : const Color(0xff1f1835),
+            // gradient: isSelected
+                // ? const LinearGradient(
+                //     colors: [Color(0xff7c49de), Color(0xffdcb383)],
+                //     begin: Alignment.bottomLeft,
+                //     end: Alignment.bottomRight,
+                //   )
+                // : null,
+            // color: isSelected ? null : const Color(0xff1f1835),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

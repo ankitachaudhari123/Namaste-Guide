@@ -44,7 +44,7 @@ class _ListOfMoodsState extends State<ListOfMoods> {
       return;
     }
 
-    String uri = "http://192.168.1.36/namaste_guide_api/feach_your_mood_data.php";
+    String uri = "http://192.168.1.48/namaste_guide_api/feach_your_mood_data.php";
 
     try {
       var response = await http.post(

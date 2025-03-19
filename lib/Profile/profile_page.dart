@@ -6,6 +6,8 @@ import 'ChangeUserName.dart';
 import 'YourInfo.dart';
 import 'changeWeightAndHeight.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -52,6 +54,61 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
+
+
+ String email = "";
+  List userinfo = [];
+
+ @override
+  void initState() {
+    super.initState();
+    useremail();
+  }
+
+  Future<void> useremail() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? storedEmail = prefs.getString('user_email');
+    setState(() {
+      email = storedEmail ?? "";
+    });
+
+    print("profile email: $email");
+
+    if (email.isNotEmpty) {
+      userinfodata();
+    }
+  }
+
+  Future<void> userinfodata() async{
+ if (email.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("profile page Shared preferences email ID missing")),
+      );
+      return;
+    }
+
+    String uri = "http://192.168.1.36/namaste_guide_api/feach_user_info.php";
+
+    try{
+      var response = await http.post(
+        Uri.parse(uri),
+        body: {'email_id': email},
+      );
+       if (response.statusCode == 200) {
+        setState(() {
+          userinfo = jsonDecode(response.body);
+          print("user info list : $userinfo");
+        });
+      } else {
+        print("Error: ${response.statusCode}");
+        setState(() {
+        });
+      }
+    }catch(e){
+      print("Exception: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,7 +134,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Ankita Chaudhari",
+                      userinfo[0]['user_name']??"No Name",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 20,
@@ -85,7 +142,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                     Text(
-                      "ankitachaudhari631@gmail.com",
+                      userinfo[0]['user_email_id']??"No email id",
                       style: TextStyle(
                         color: Colors.white,
                       ),

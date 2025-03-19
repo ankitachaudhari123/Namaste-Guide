@@ -16,7 +16,7 @@ class _Breathing_experciseState extends State<Breathing_expercise> {
   bool isLoading = true; // Initially, loading is true
 
   Future<void> fetchExerciseList() async {
-    String uri = "http://192.168.1.36/namaste_guide_api/feach_exercise.php";
+    String uri = "http://192.168.1.48/namaste_guide_api/feach_exercise.php";
 
     try {
       var response = await http.post(

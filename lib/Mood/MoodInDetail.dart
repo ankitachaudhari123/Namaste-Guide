@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:namaste_guide/Mood/todays_mood.dart';
 import 'dart:convert';
+
+import 'ChooseYourMoodAndWriteText.dart';
 
 class MoodInDetail extends StatefulWidget {
   final String MoodId;
@@ -12,7 +15,7 @@ class MoodInDetail extends StatefulWidget {
 
 class _MoodInDetailState extends State<MoodInDetail> {
   List moodinfo = [];
-  bool isLoading = true; // Added to track loading state
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -21,7 +24,7 @@ class _MoodInDetailState extends State<MoodInDetail> {
   }
 
   Future<void> fetchmoodinfo() async {
-    String uri = "http://192.168.1.36/namaste_guide_api/feach_mood_desc.php";
+    String uri = "http://192.168.1.48/namaste_guide_api/feach_mood_desc.php";
 
     try {
       var response = await http.post(
@@ -34,7 +37,7 @@ class _MoodInDetailState extends State<MoodInDetail> {
         print("mood list: $data");
 
         setState(() {
-          moodinfo = data; // Update moodinfo
+          moodinfo = data;
           isLoading = false;
         });
       } else {
@@ -51,12 +54,81 @@ class _MoodInDetailState extends State<MoodInDetail> {
     }
   }
 
+Future<void> deletemoodinfo() async {
+  String uri = "http://192.168.1.48/namaste_guide_api/delete_mood.php";
+
+  try {
+    var response = await http.post(
+      Uri.parse(uri),
+      body: {'mood_id': widget.MoodId},
+    );
+
+    print("Delete API Response: ${response.body}");
+
+   if(response.body == 'success'){
+    ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Deleted successfully!")),
+        );
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => TodaysMood()),
+          );
+   }else{
+ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Deleted successfully!")),
+        );
+   }    
+  } catch (e) {
+    print("Exception: $e");
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Exception: $e")),
+    );
+  }
+}
+
+  void showDeleteDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Delete Mood"),
+          content: Text("Are you sure you want to delete this mood?"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context), 
+              child: Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                deletemoodinfo(); 
+              },
+              child: Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Your Feelings"),
         backgroundColor: const Color(0xff1f1835),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: () {
+              
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: showDeleteDialog, // Show confirmation dialog
+          ),
+        ],
       ),
       body: Container(
         width: double.infinity,
@@ -65,7 +137,7 @@ class _MoodInDetailState extends State<MoodInDetail> {
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: isLoading
-              ? const Center(child: CircularProgressIndicator()) // Show loading
+              ? const Center(child: CircularProgressIndicator())
               : moodinfo.isEmpty
                   ? const Center(
                       child: Text(
