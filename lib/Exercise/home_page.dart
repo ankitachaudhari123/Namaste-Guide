@@ -15,7 +15,7 @@ class _HomePageState extends State<HomePage> {
   List yogaplanlist = [];
 
   Future<void> yogaplans() async {
-    String uri = "http://192.168.1.48/namaste_guide_api/feach_yoga_plans.php";
+    String uri = "http://192.168.43.50/namaste_guide_api/feach_yoga_plans.php";
 
     try {
       var response = await http.post(
@@ -108,7 +108,7 @@ class _HomePageState extends State<HomePage> {
                                     image: AssetImage(
                                       'asset/${yogaplanlist[index]['yoga_plan_image'] ?? 'default_image.png'}',
                                     ),
-                                    fit: BoxFit.cover,
+                                    // fit: BoxFit.cover,
                                   ),
                                 ),
                               ),
