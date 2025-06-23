@@ -98,6 +98,7 @@ class _Breathing_experciseState extends State<Breathing_expercise> {
                             child: Container(
                               width: 80,
                               decoration: BoxDecoration(
+                                color:Color.fromARGB(255, 115, 113, 113),
                                 image: DecorationImage(
                                   image: AssetImage('asset/${exerciselist[index]['exercise_cover_img'] ?? 'default_image.png'}'),
                                 ),

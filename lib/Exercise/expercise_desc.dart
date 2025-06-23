@@ -80,12 +80,13 @@ class _ExperciseDescState extends State<ExperciseDesc> {
               padding: const EdgeInsets.all(10),
               child: Container(
                 width: double.infinity,
-                height: 400, // Keep a fixed height for the image
+                height: 500, // Keep a fixed height for the image
                 decoration: BoxDecoration(
+                  color: Color.fromARGB(255, 115, 113, 113),
                   borderRadius: BorderRadius.circular(10),
                   image: DecorationImage(
                     image: AssetImage('asset/${exerciseinfo[0]['exercise_img'] ?? 'default_image.png'}'),
-                    fit: BoxFit.cover,
+                    // fit: BoxFit.cover,
                   ),
                 ),
               ),

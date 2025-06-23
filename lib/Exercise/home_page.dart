@@ -108,7 +108,7 @@ class _HomePageState extends State<HomePage> {
                                     image: AssetImage(
                                       'asset/${yogaplanlist[index]['yoga_plan_image'] ?? 'default_image.png'}',
                                     ),
-                                    // fit: BoxFit.cover,
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
                               ),
