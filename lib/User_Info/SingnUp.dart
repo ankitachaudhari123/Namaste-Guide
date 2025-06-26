@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:namaste_guide/User_Info/SignIn.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import '../Bottom_Nav_Bar/BottomNav.dart';
+// import '../Bottom_Nav_Bar/BottomNav.dart';
 import 'DialogBox.dart';
 
 class SignUp extends StatefulWidget {
@@ -49,16 +49,17 @@ class _SignUpState extends State<SignUp> {
 
       if (response.statusCode == 200) {
         if (responseData["status"] == "success") {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          await prefs.setString('user_email', email);
+          // SharedPreferences prefs = await SharedPreferences.getInstance();
+          // await prefs.setString('user_email', email);
 
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => BottomNavPage()),
+            MaterialPageRoute(builder: (context) => SignIn()),
           );
         } else if (responseData["message"] == "You already have account") {
-          print("Dialog should appear now!");
-          showAlreadyHaveAccountDialog(context);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(responseData["message"])),
+          );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(responseData["message"])),
