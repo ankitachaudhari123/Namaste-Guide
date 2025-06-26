@@ -56,10 +56,13 @@ class _SplashScreenState extends State<SplashScreen> {
           child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: const [
-            Icon(Icons.app_registration, size: 100, color: Colors.white),
-            SizedBox(height: 20),
+            Image(
+              image: AssetImage('asset/logo.png'),
+              width: 200,
+              height: 200,
+            ),
             Text(
-              "Welcome to My App",
+              "Namaste Guide",
               style: TextStyle(fontSize: 24, color: Colors.white),
             ),
           ],

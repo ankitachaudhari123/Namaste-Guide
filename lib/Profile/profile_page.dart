@@ -311,7 +311,45 @@ class _ProfilePageState extends State<ProfilePage> {
                     children: [
                       const SizedBox(width: 15),
                       const Icon(
-                        Icons.delete_outline_outlined,
+                        Icons.logout,
+                        color: Colors.white,
+                        size: 30,
+                      ),
+                      const SizedBox(width: 14),
+                      const Text(
+                        "Logout",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
+               Padding(
+              padding: const EdgeInsets.only(left: 10,right: 10),
+              child: GestureDetector(
+                onTap: _showDeleteDialog, // Show confirmation dialog
+                child: Container(
+                  width: double.infinity,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    gradient: const LinearGradient(
+                      colors: [Color(0xff7c49de), Color(0xffdcb383)],
+                      begin: Alignment.bottomLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      const SizedBox(width: 15),
+                      const Icon(
+                        Icons.delete,
                         color: Colors.white,
                         size: 30,
                       ),
