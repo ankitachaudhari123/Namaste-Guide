@@ -154,8 +154,8 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
 
               /// Mood Selection Grid
               Wrap(
-                spacing: 8,
-                runSpacing: 12,
+                spacing: 5,
+                runSpacing: 10,
                 children: moods.map((mood) {
                   return GestureDetector(
                     onTap: () => toggleMood(mood["label"]),
@@ -164,7 +164,7 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
                       decoration: BoxDecoration(
                         color: selectedMood == mood["label"]
                             ? const Color(0xff7c49de)
-                            : const Color(0xff2c2343),
+                            : Color.fromARGB(255, 130, 128, 135),
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(color: Colors.white12),
                       ),
