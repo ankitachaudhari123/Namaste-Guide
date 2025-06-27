@@ -14,7 +14,7 @@ class ListOfMoods extends StatefulWidget {
 class _ListOfMoodsState extends State<ListOfMoods> {
   String email = "";
   List moodlist = [];
-  bool isLoading = true; // New variable to track loading state
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -55,8 +55,8 @@ class _ListOfMoodsState extends State<ListOfMoods> {
       if (response.statusCode == 200) {
         setState(() {
           moodlist = jsonDecode(response.body);
-          isLoading = false; 
-          print("mood list : $moodlist");
+          isLoading = false;
+          print("mood list: $moodlist");
         });
       } else {
         print("Error: ${response.statusCode}");
@@ -72,6 +72,72 @@ class _ListOfMoodsState extends State<ListOfMoods> {
     }
   }
 
+  String getMoodEmoji(String mood) {
+    switch (mood.toLowerCase()) {
+      case 'happy':
+        return "😊";
+      case 'sad':
+        return "😢";
+      case 'angry':
+        return "😡";
+      case 'surprise':
+        return "😮";
+      case 'confused':
+        return "🤔";
+      case 'excited':
+        return "😍";
+      case 'bored':
+        return "😞";
+      case 'anxious':
+        return "😟";
+      case 'nervous':
+        return "😬";
+      case 'frustrated':
+        return "😤";
+      case 'content':
+        return "😊";
+      case 'disappointed':
+        return "😔";
+      case 'joyful':
+        return "🥳";
+      case 'grateful':
+        return "🙏";
+      case 'embarrassed':
+        return "😳";
+      case 'proud':
+        return "😌";
+      case 'lonely':
+        return "😔";
+      case 'relaxed':
+        return "☺️";
+      case 'overwhelmed':
+        return "😵‍💫";
+      case 'motivated':
+        return "💪";
+      case 'guilty':
+        return "😓";
+      case 'euphoric':
+        return "🥳";
+      case 'hopeful':
+        return "🌈";
+      case 'fearful':
+        return "😨";
+      case 'indifferent':
+        return "😐";
+      case 'skeptical':
+        return "🤨";
+      case 'determined':
+        return "🏆";
+      case 'furious':
+        return "😤";
+      case 'cheerful':
+        return "😄";
+      case 'pessimistic':
+        return "😒";
+      default:
+        return "❓";
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,13 +150,13 @@ class _ListOfMoodsState extends State<ListOfMoods> {
           children: [
             Expanded(
               child: isLoading
-                  ? Center(
+                  ? const Center(
                       child: CircularProgressIndicator(
                         color: Colors.white,
                       ),
                     )
                   : moodlist.isEmpty
-                      ? Center(
+                      ? const Center(
                           child: Text(
                             "No mood data available",
                             style: TextStyle(color: Colors.white, fontSize: 16),
@@ -100,59 +166,23 @@ class _ListOfMoodsState extends State<ListOfMoods> {
                           itemCount: moodlist.length,
                           itemBuilder: (context, index) {
                             String mood = moodlist[index]['mood'] ?? "Unknown";
-                            IconData getMoodIcon(String mood) {
-      switch (mood.toLowerCase()) {
-        case 'happy':
-          return Icons.emoji_emotions_outlined;
-        case 'sad':
-          return Icons.sentiment_dissatisfied;
-        case 'angry':
-          return Icons.sentiment_very_dissatisfied;
-        case 'sleepy':
-          return Icons.hotel;
-        case 'speak to someone':
-          return Icons.call;
-        case 'work':
-          return Icons.work_outline;
-        case 'study':
-          return Icons.computer;
-        case 'gym & yoga':
-          return Icons.self_improvement;
-        case 'party':
-          return Icons.celebration;
-        case 'travel':
-          return Icons.travel_explore_rounded;
-        case 'cleaning':
-          return Icons.cleaning_services;
-        case 'cooking':
-          return Icons.food_bank_outlined;
-        case 'shopping':
-          return Icons.shopping_cart_outlined;
-        case 'creative':
-          return Icons.brush;
-        case 'reading':
-          return Icons.menu_book;
-        case 'writing':
-          return Icons.mode_edit_outlined;
-        default:
-          return Icons.help_outline; // Default icon for unknown moods
-      }
-    }
+                            String moodId = moodlist[index]['mood_id'].toString();
+                            String moodTime = moodlist[index]['time'] ?? "No Time";
+
                             return GestureDetector(
                               onTap: () {
-                                String moodId = moodlist[index]['mood_id'].toString();
-
-                                print("mood id :$moodId");
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => MoodInDetail(MoodId: moodId)),
+                                  MaterialPageRoute(
+                                    builder: (context) => MoodInDetail(MoodId: moodId),
+                                  ),
                                 );
                               },
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                                 child: Container(
                                   width: double.infinity,
-                                  height: 50,
+                                  height: 70,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
                                     gradient: const LinearGradient(
@@ -162,22 +192,17 @@ class _ListOfMoodsState extends State<ListOfMoods> {
                                     ),
                                   ),
                                   child: ListTile(
-                                    leading: Icon(
-                                     getMoodIcon(mood),
-                                      color: Colors.white,
-                                      size: 40,
-                                    ),
-                                    trailing: Text(
-                                      moodlist[index]['time'] ?? "No Time",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                      ),
+                                    leading: Text(
+                                      getMoodEmoji(mood),
+                                      style: const TextStyle(fontSize: 30),
                                     ),
                                     title: Text(
-                                      "Mood: ${moodlist[index]['mood']}",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                      ),
+                                      "Mood: $mood",
+                                      style: const TextStyle(color: Colors.white),
+                                    ),
+                                    trailing: Text(
+                                      moodTime,
+                                      style: const TextStyle(color: Colors.white),
                                     ),
                                   ),
                                 ),
