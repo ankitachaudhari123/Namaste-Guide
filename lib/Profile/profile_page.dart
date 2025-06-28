@@ -120,9 +120,16 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            userinfo.isNotEmpty ? userinfo[0]['user_name'] ?? "No Name" : "No Name",
-                            style: const TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                userinfo.isNotEmpty ? userinfo[0]['user_name'] ?? "No Name" : "No Name",
+                                style: const TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(width: 10,),
+                              Icon(Icons.edit,color: Colors.white,),
+                            ],
                           ),
                           Text(
                             userinfo.isNotEmpty ? userinfo[0]['user_email_id'] ?? "No email id" : "No email id",
@@ -132,9 +139,6 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    _buildProfileTile(Icons.edit_document, "Chnage Username", () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const ChangeUserName()));
-                    }),
                     _buildProfileTile(Icons.info_outline, "Chnage Your weight & height", () {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => const ChangeHightWeight()));
                     }),
