@@ -1,4 +1,3 @@
-// ... [your existing imports]
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -128,7 +127,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                 style: const TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
                               ),
                               SizedBox(width: 10,),
-                              Icon(Icons.edit,color: Colors.white,),
+                              GestureDetector(
+                                onTap: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=> ChangeUserName()),);
+                                },
+                                child:Icon(Icons.edit,color: Colors.white,),
+                              ),
+                              
                             ],
                           ),
                           Text(
