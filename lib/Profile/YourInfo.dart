@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class YourInfo extends StatefulWidget {
   const YourInfo({super.key});
@@ -10,29 +11,77 @@ class YourInfo extends StatefulWidget {
 }
 
 class _YourInfoState extends State<YourInfo> {
+  List yourinfo = [];
+  bool isLoading = true;
+
+  Future<void> fetchUserInfo() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? email = prefs.getString('user_email');
+
+    if (email != null) {
+      try {
+        var url = Uri.parse('http://192.168.43.50/namaste_guide_api/feach_user_info.php');
+        var response = await http.post(url, body: {
+          'email_id': email,
+        });
+
+        if (response.statusCode == 200) {
+          setState(() {
+            yourinfo = jsonDecode(response.body);
+            isLoading = false;
+          });
+        } else {
+          print("Error: ${response.statusCode}");
+          setState(() {
+            isLoading = false;
+          });
+        }
+      } catch (e) {
+        print("Exception: $e");
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserInfo();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "Your Info",
-          ),
-          backgroundColor: Color(0xff1f1835),
+        title: const Text("Your Info"),
+        backgroundColor: const Color(0xff1f1835),
       ),
       body: Container(
         width: double.infinity,
         height: double.infinity,
         color: const Color(0xff1f1835),
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildInfoRow("Username", "Ankita Balram Chaudhari"),
-            _buildInfoRow("Weight", "55 kg"),
-            _buildInfoRow("Height", "165 cm"),
-            _buildInfoRow("BMI", "20.2"),
-          ],
-        ),
+        child: isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : yourinfo.isNotEmpty
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildInfoRow("Username", yourinfo[0]['user_name']),
+                      _buildInfoRow("Weight", "${yourinfo[0]['weight']} kg"),
+                      _buildInfoRow("Height", "${yourinfo[0]['height']} cm"),
+                      _buildInfoRow("BMI", "${yourinfo[0]['bmi']}"),
+                      _buildInfoRow("BMI Status", "${yourinfo[0]['bmi_status']}")
+                    ],
+                  )
+                : const Center(
+                    child: Text(
+                      "No user data found.",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
       ),
     );
   }
@@ -65,5 +114,12 @@ class _YourInfoState extends State<YourInfo> {
         ],
       ),
     );
+  }
+
+  String calculateBMI(double? heightCm, double? weightKg) {
+    if (heightCm == null || weightKg == null || heightCm == 0) return "N/A";
+    double heightM = heightCm / 100;
+    double bmi = weightKg / (heightM * heightM);
+    return bmi.toStringAsFixed(1);
   }
 }
