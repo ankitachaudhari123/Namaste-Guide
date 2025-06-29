@@ -71,7 +71,7 @@ class _YourInfoState extends State<YourInfo> {
                     children: [
                       _buildInfoRow("Username", yourinfo[0]['user_name']),
                       _buildInfoRow("Weight", "${yourinfo[0]['weight']} kg"),
-                      _buildInfoRow("Height", "${yourinfo[0]['height']} cm"),
+                      _buildInfoRow("Height", "${yourinfo[0]['height']} Meters"),
                       _buildInfoRow("BMI", "${yourinfo[0]['bmi']}"),
                       _buildInfoRow("BMI Status", "${yourinfo[0]['bmi_status']}")
                     ],

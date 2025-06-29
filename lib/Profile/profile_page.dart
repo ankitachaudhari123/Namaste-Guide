@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:namaste_guide/User_Info/SignIn.dart';
+import 'package:namaste_guide/User_Info/SingnUp.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
-import '../User_Info/SingnUp.dart';
 import 'ChangeUserName.dart';
 import 'YourInfo.dart';
 import 'changeWeightAndHeight.dart';
@@ -16,22 +16,63 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  Future<void> _deleteAccount(BuildContext context) async {
+  Future<void> _logout(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('user_email');
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (context) => const SignUp()),
+      MaterialPageRoute(builder: (context) => const SignIn()),
       (route) => false,
     );
   }
+   Future<void> _delete(BuildContext context) async {
+     SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? email = prefs.getString('user_email');
 
-  void _showDeleteDialog() {
+  if (email == null || email.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Email not found in preferences")),
+    );
+    return;
+  }
+
+  try {
+    var response = await http.post(
+      Uri.parse("http://192.168.43.50/namaste_guide_api/delete_account.php"),
+      body: {'email_id': email},
+    );
+
+    var result = jsonDecode(response.body); 
+
+    if (result == "account delete successfully") {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Account deleted successfully")),
+      );
+      // await prefs.remove('user_email');
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const SignUp()),
+        (route) => false,
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please try again")),
+      );
+    }
+  } catch (e) {
+    print("Error deleting account: $e");
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Something went wrong")),
+    );
+  }
+}
+
+  void _showlogoutDialog() {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Delete Account"),
-        content: const Text("Are you sure you want to delete your account? This action cannot be undone."),
+        title: const Text("Logout"),
+        content: const Text("Are you sure you want to logout your account? "),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -40,9 +81,32 @@ class _ProfilePageState extends State<ProfilePage> {
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              _deleteAccount(context);
+              _logout(context);
             },
-            child: const Text("Delete", style: TextStyle(color: Colors.red)),
+            child: const Text("Logout", style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showdeleteDialog(){
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Delete Account"),
+        content: const Text("Are you sure you want to Delete your account? "),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              _delete(context);
+            },
+            child: const Text("Delete Account", style: TextStyle(color: Colors.red)),
           ),
         ],
       ),
@@ -152,8 +216,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     }),
                     _buildProfileTile(Icons.share, "Share App", () {}),
                     _buildProfileTile(Icons.star_border, "Rate App", () {}),
-                    _buildProfileTile(Icons.logout, "Logout", _showDeleteDialog),
-                    _buildProfileTile(Icons.delete, "Delete Account", _showDeleteDialog),
+                    _buildProfileTile(Icons.logout, "Logout", _showlogoutDialog),
+                    _buildProfileTile(Icons.delete, "Delete Account", _showdeleteDialog),
                   ],
                 ),
               ),
