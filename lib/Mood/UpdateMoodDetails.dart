@@ -1,142 +1,193 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class UpdateMoodDetails extends StatefulWidget {
-  const UpdateMoodDetails({super.key});
+  final String moodId;
+  final bool isEdit;
+  final Map<String, dynamic>? existingMoodData;
+
+  const UpdateMoodDetails({
+    super.key,
+    required this.moodId,
+    required this.isEdit,
+    this.existingMoodData,
+  });
 
   @override
   State<UpdateMoodDetails> createState() => _UpdateMoodDetailsState();
 }
 
 class _UpdateMoodDetailsState extends State<UpdateMoodDetails> {
+  String selectedMood = "Happy";
+  final TextEditingController feelingsController = TextEditingController();
+
+  final List<Map<String, dynamic>> moods = [
+    {"label": "Happy", "emoji": "😊"},
+    {"label": "Sad", "emoji": "😢"},
+    {"label": "Angry", "emoji": "😡"},
+    {"label": "Surprise", "emoji": "😮"},
+    {"label": "Confused", "emoji": "🤔"},
+    {"label": "Excited", "emoji": "😍"},
+    {"label": "Bored", "emoji": "😞"},
+    {"label": "Anxious", "emoji": "😟"},
+    {"label": "Nervous", "emoji": "😬"},
+    {"label": "Frustrated", "emoji": "😤"},
+    {"label": "Content", "emoji": "😊"},
+    {"label": "Disappointed", "emoji": "😔"},
+    {"label": "Joyful", "emoji": "🥳"},
+    {"label": "Grateful", "emoji": "🙏"},
+    {"label": "Embarrassed", "emoji": "😳"},
+    {"label": "Proud", "emoji": "😌"},
+    {"label": "Lonely", "emoji": "😔"},
+    {"label": "Relaxed", "emoji": "☺️"},
+    {"label": "Overwhelmed", "emoji": "😵‍💫"},
+    {"label": "Motivated", "emoji": "💪"},
+    {"label": "Guilty", "emoji": "😓"},
+    {"label": "Euphoric", "emoji": "🥳"},
+    {"label": "Hopeful", "emoji": "🌈"},
+    {"label": "Fearful", "emoji": "😨"},
+    {"label": "Indifferent", "emoji": "😐"},
+    {"label": "Skeptical", "emoji": "🤨"},
+    {"label": "Determined", "emoji": "🏆"},
+    {"label": "Furious", "emoji": "😤"},
+    {"label": "Cheerful", "emoji": "😄"},
+    {"label": "Pessimistic", "emoji": "😒"},
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.isEdit && widget.existingMoodData != null) {
+      selectedMood = widget.existingMoodData!['mood'] ?? selectedMood;
+      feelingsController.text = widget.existingMoodData!['fellings'] ?? "";
+    }
+  }
+
+  void toggleMood(String mood) {
+    setState(() {
+      selectedMood = (selectedMood == mood) ? "" : mood;
+    });
+  }
+
+  Future<void> updateMoodToBackend() async {
+    String updatedMood = selectedMood;
+    String updatedFeelings = feelingsController.text.trim();
+
+    if (updatedMood.isEmpty || updatedFeelings.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please select a mood and enter your feelings.")),
+      );
+      return;
+    }
+
+    try {
+      var response = await http.post(
+        Uri.parse("http://192.168.43.50/namaste_guide_api/update_mood.php"),
+        body: {
+          'mood_id': widget.moodId,
+          'mood': updatedMood,
+          'fellings': updatedFeelings,
+        },
+      );
+
+      print("Update Response: ${response.body}");
+
+      if (response.statusCode == 200 && response.body == "success") {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Mood updated successfully!")),
+        );
+        Navigator.pop(context); // Go back to previous page
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Failed to update mood.")),
+        );
+      }
+    } catch (e) {
+      print("Error: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: $e")),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("Edit Mood Info"),
+        backgroundColor: const Color(0xff1f1835),
+      ),
       backgroundColor: const Color(0xff1f1835),
       body: SafeArea(
         child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextField(
-                  // controller: feelingsController,
-                  style: const TextStyle(color: Colors.white),
-                  decoration: const InputDecoration(
-                    labelText: 'Enter Your Feelings',
-                    labelStyle: TextStyle(color: Colors.white),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white, width: 2.0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white, width: 2.0),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-
-                /// Mood Selection Grid
-                _buildMoodRow([
-                  _buildMoodTile("Happy", Icons.emoji_emotions_outlined),
-                  _buildMoodTile("Sad", Icons.sentiment_dissatisfied),
-                  _buildMoodTile("Angry", Icons.sentiment_very_dissatisfied ),
-                  _buildMoodTile("Sleepy", Icons.hotel),
-                ]),
-                _buildMoodRow([
-                  _buildMoodTile("Speak to Someone", Icons.call),
-                  _buildMoodTile("Work", Icons.work_outline),
-                  _buildMoodTile("Study", Icons.computer),
-                  _buildMoodTile("Gym & Yoga", Icons.self_improvement ),
-                ]),
-                _buildMoodRow([
-                  _buildMoodTile("Party", Icons.celebration ),
-                  _buildMoodTile("Travel", Icons.travel_explore_rounded),
-                  _buildMoodTile("Cleaning", Icons.cleaning_services ),
-                  _buildMoodTile("Cooking", Icons.food_bank_outlined),
-                ]),
-                _buildMoodRow([
-                  _buildMoodTile("Shopping", Icons.shopping_cart_outlined),
-                  _buildMoodTile("Creative", Icons.brush ),
-                  _buildMoodTile("Reading", Icons.menu_book ),
-                  _buildMoodTile("Writing", Icons.mode_edit_outlined),
-                ]),
-
-                const SizedBox(height: 20),
-
-                /// Add Mood Button
-                GestureDetector(
-                  // onTap: insertMood,
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 15),
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [Color(0xff7c49de), Color(0xffdcb383)],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    alignment: Alignment.center,
-                    child: const Text(
-                      "Add Mood",
-                      style: TextStyle(fontSize: 18, color: Colors.white),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  /// Builds a single row of moods
-  Widget _buildMoodRow(List<Widget> moodTiles) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: moodTiles,
-      ),
-    );
-  }
-
-  /// Builds an individual mood tile
-  Widget _buildMoodTile(String mood, IconData icon) {
-    // bool isSelected = selectedMood == mood;
-    return Expanded(
-      child: GestureDetector(
-        // onTap: () => toggleMood(mood),
-        child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 5),
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            // gradient: isSelected
-                // ? const LinearGradient(
-                //     colors: [Color(0xff7c49de), Color(0xffdcb383)],
-                //     begin: Alignment.bottomLeft,
-                //     end: Alignment.bottomRight,
-                //   )
-                // : null,
-            // color: isSelected ? null : const Color(0xff1f1835),
-          ),
+          padding: const EdgeInsets.all(16),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(icon, color: Colors.white, size: 40),
-              const SizedBox(height: 5),
-              Text(
-                mood,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                    color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
+              /// TextField for Feelings
+              TextField(
+                controller: feelingsController,
+                style: const TextStyle(color: Colors.white),
+                decoration: const InputDecoration(
+                  labelText: 'Enter Your Feelings',
+                  labelStyle: TextStyle(color: Colors.white),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white, width: 2.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white, width: 2.0),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Wrap(
+                spacing: 5,
+                runSpacing: 10,
+                children: moods.map((mood) {
+                  return GestureDetector(
+                    onTap: () => toggleMood(mood["label"]),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: selectedMood == mood["label"]
+                            ? const Color(0xff7c49de)
+                            : const Color.fromARGB(255, 130, 128, 135),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: Colors.white12),
+                      ),
+                      child: Text(
+                        "${mood["emoji"]} ${mood["label"]}",
+                        style: const TextStyle(color: Colors.white, fontSize: 14),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+
+              const SizedBox(height: 30),
+
+              /// Update Mood Button
+              GestureDetector(
+                onTap: updateMoodToBackend,
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [Color(0xff7c49de), Color(0xffdcb383)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  alignment: Alignment.center,
+                  child: const Text(
+                    "Update Mood",
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  ),
+                ),
               ),
             ],
           ),

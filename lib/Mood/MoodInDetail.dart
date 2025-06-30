@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:namaste_guide/Mood/UpdateMoodDetails.dart';
 import 'package:namaste_guide/Mood/todays_mood.dart';
 import 'dart:convert';
-
 import 'ChooseYourMoodAndWriteText.dart';
 
 class MoodInDetail extends StatefulWidget {
@@ -54,37 +54,37 @@ class _MoodInDetailState extends State<MoodInDetail> {
     }
   }
 
-Future<void> deletemoodinfo() async {
-  String uri = "http://192.168.43.50/namaste_guide_api/delete_mood.php";
+  Future<void> deletemoodinfo() async {
+    String uri = "http://192.168.43.50/namaste_guide_api/delete_mood.php";
 
-  try {
-    var response = await http.post(
-      Uri.parse(uri),
-      body: {'mood_id': widget.MoodId},
-    );
+    try {
+      var response = await http.post(
+        Uri.parse(uri),
+        body: {'mood_id': widget.MoodId},
+      );
 
-    print("Delete API Response: ${response.body}");
+      print("Delete API Response: ${response.body}");
 
-   if(response.body == 'success'){
-    ScaffoldMessenger.of(context).showSnackBar(
+      if (response.body == 'success') {
+        ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Deleted successfully!")),
         );
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => TodaysMood()),
-          );
-   }else{
-ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Deleted successfully!")),
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => TodaysMood()),
         );
-   }    
-  } catch (e) {
-    print("Exception: $e");
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Exception: $e")),
-    );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Failed to delete mood.")),
+        );
+      }
+    } catch (e) {
+      print("Exception: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Exception: $e")),
+      );
+    }
   }
-}
 
   void showDeleteDialog() {
     showDialog(
@@ -95,13 +95,13 @@ ScaffoldMessenger.of(context).showSnackBar(
           content: Text("Are you sure you want to delete this mood?"),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(context), 
+              onPressed: () => Navigator.pop(context),
               child: Text("Cancel"),
             ),
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
-                deletemoodinfo(); 
+                deletemoodinfo();
               },
               child: Text("OK"),
             ),
@@ -121,12 +121,30 @@ ScaffoldMessenger.of(context).showSnackBar(
           IconButton(
             icon: Icon(Icons.edit),
             onPressed: () {
-              
+              if (moodinfo.isNotEmpty) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UpdateMoodDetails(
+                      moodId: widget.MoodId,
+                      isEdit: true,
+                      existingMoodData: {
+                        'mood': moodinfo[0]['mood'],
+                        'fellings': moodinfo[0]['fellings'],
+                      },
+                    ),
+                  ),
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Mood data not available yet")),
+                );
+              }
             },
           ),
           IconButton(
             icon: Icon(Icons.delete),
-            onPressed: showDeleteDialog, // Show confirmation dialog
+            onPressed: showDeleteDialog,
           ),
         ],
       ),
@@ -150,22 +168,26 @@ ScaffoldMessenger.of(context).showSnackBar(
                       children: [
                         Text(
                           "Mood: ${moodinfo[0]['mood']}",
-                          style: const TextStyle(color: Colors.white, fontSize: 20),
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 20),
                         ),
                         const SizedBox(height: 10),
                         Text(
                           "Time: ${moodinfo[0]['time']}",
-                          style: const TextStyle(color: Colors.white, fontSize: 20),
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 20),
                         ),
                         const SizedBox(height: 10),
                         Text(
                           "Date: ${moodinfo[0]['date']}",
-                          style: const TextStyle(color: Colors.white, fontSize: 20),
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 20),
                         ),
                         const SizedBox(height: 10),
                         Text(
                           "Your Feelings: ${moodinfo[0]['fellings']}",
-                          style: const TextStyle(color: Colors.white, fontSize: 20),
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 20),
                         ),
                       ],
                     ),
