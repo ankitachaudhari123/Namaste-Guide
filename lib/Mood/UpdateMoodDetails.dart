@@ -6,14 +6,12 @@ class UpdateMoodDetails extends StatefulWidget {
   final String moodId;
   final bool isEdit;
   final Map<String, dynamic>? existingMoodData;
-
   const UpdateMoodDetails({
     super.key,
     required this.moodId,
     required this.isEdit,
     this.existingMoodData,
   });
-
   @override
   State<UpdateMoodDetails> createState() => _UpdateMoodDetailsState();
 }
