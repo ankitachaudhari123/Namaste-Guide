@@ -142,6 +142,15 @@ class _ListOfMoodsState extends State<ListOfMoods> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+       backgroundColor: const Color(0xff1f1835),
+    appBar: AppBar(
+      title: Text(
+        isLoading ? "Loading..." : (moodlist.isNotEmpty ? "Your Moods" : "No Mood Data"),
+        style: const TextStyle(color: Colors.white),
+      ),
+      backgroundColor: const Color(0xff1f1835),
+      iconTheme: const IconThemeData(color: Colors.white),
+    ),
       body: Container(
         width: double.infinity,
         height: double.infinity,

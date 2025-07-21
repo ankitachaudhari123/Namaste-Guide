@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
-import '../Bottom_Nav_Bar/BottomNav.dart';
+import 'package:namaste_guide/Mood/MoodInDetail.dart';
 
 class ChooseYourMood extends StatefulWidget {
   const ChooseYourMood({super.key});
@@ -72,16 +72,12 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
     String feelings = feelingsController.text.trim();
 
     if (email.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Email is missing! Please log in again.")),
-      );
+      _showMsg("Email is missing! Please log in again.");
       return;
     }
 
     if (selectedMood.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please select a mood!")),
-      );
+      _showMsg("Please select a mood!");
       return;
     }
 
@@ -102,27 +98,41 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
       );
 
       var responseData = jsonDecode(response.body);
+
       if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(responseData["message"])),
-        );
+        _showMsg(responseData["message"]);
 
         if (responseData["status"] == "success") {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => BottomNavPage()),
-          );
+          final rawId = responseData["insert_id"];
+          final int moodId = rawId is int ? rawId : int.tryParse(rawId.toString()) ?? -1;
+
+          if (!mounted) return;
+
+          // Navigate to MoodInDetail with MoodId as String
+          if (moodId > 0) {
+            Navigator.push(
+  context,
+  MaterialPageRoute(
+    builder: (_) => MoodInDetail(MoodId: moodId.toString()),
+  ),
+);
+
+          } else {
+            _showMsg("Mood saved, but ID not found.");
+          }
         }
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Server Error! Please try again later.")),
-        );
+        _showMsg("Server Error! Please try again later.");
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error: $e")),
-      );
+      _showMsg("Error: $e");
     }
+  }
+
+  void _showMsg(String msg) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(msg)),
+    );
   }
 
   @override
@@ -135,7 +145,7 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              /// TextField
+              /// TextField for feelings
               TextField(
                 controller: feelingsController,
                 style: const TextStyle(color: Colors.white),
@@ -164,7 +174,7 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
                       decoration: BoxDecoration(
                         color: selectedMood == mood["label"]
                             ? const Color(0xff7c49de)
-                            : Color.fromARGB(255, 130, 128, 135),
+                            : const Color.fromARGB(255, 130, 128, 135),
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(color: Colors.white12),
                       ),
