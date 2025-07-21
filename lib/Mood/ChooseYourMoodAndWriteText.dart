@@ -85,7 +85,7 @@ class _ChooseYourMoodState extends State<ChooseYourMood> {
       return;
     }
 
-    var url = Uri.parse("http://192.168.43.50/namaste_guide_api/insert_your_mood.php");
+    var url = Uri.parse("http://192.168.31.71/namaste_guide_api/insert_your_mood.php");
 
     try {
       var response = await http.post(

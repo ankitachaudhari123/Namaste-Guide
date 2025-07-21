@@ -24,7 +24,7 @@ class _MoodInDetailState extends State<MoodInDetail> {
   }
 
   Future<void> fetchmoodinfo() async {
-    String uri = "http://192.168.43.50/namaste_guide_api/feach_mood_desc.php";
+    String uri = "http://192.168.31.71/namaste_guide_api/feach_mood_desc.php";
 
     try {
       var response = await http.post(
@@ -55,7 +55,7 @@ class _MoodInDetailState extends State<MoodInDetail> {
   }
 
   Future<void> deletemoodinfo() async {
-    String uri = "http://192.168.43.50/namaste_guide_api/delete_mood.php";
+    String uri = "http://192.168.31.71/namaste_guide_api/delete_mood.php";
 
     try {
       var response = await http.post(

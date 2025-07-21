@@ -26,7 +26,7 @@ class _ChangeUserNameState extends State<ChangeUserName> {
 
     if (email != null) {
       try {
-        var url = Uri.parse('http://192.168.43.50/namaste_guide_api/feach_user_info.php');
+        var url = Uri.parse('http://192.168.31.71/namaste_guide_api/feach_user_info.php');
         var response = await http.post(url, body: {
           'email_id': email,
         });
@@ -56,7 +56,7 @@ class _ChangeUserNameState extends State<ChangeUserName> {
 
     if (email != null && newUsername.isNotEmpty) {
       try {
-        var url = Uri.parse('http://192.168.43.50/namaste_guide_api/update_username.php');
+        var url = Uri.parse('http://192.168.31.71/namaste_guide_api/update_username.php');
         var response = await http.post(url, body: {
           'email_id': email,
           'username': newUsername,

@@ -21,7 +21,7 @@ class _SignInState extends State<SignIn> {
     String email = _emailController.text.trim();
     String password = _passwordController.text.trim();
 
-    var url = Uri.parse("http://192.168.43.50/namaste_guide_api/sign_in.php");
+    var url = Uri.parse("http://192.168.31.71/namaste_guide_api/sign_in.php");
 
     try {
       var response = await http.post(

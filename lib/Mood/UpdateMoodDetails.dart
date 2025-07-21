@@ -82,7 +82,7 @@ class _UpdateMoodDetailsState extends State<UpdateMoodDetails> {
 
     try {
       var response = await http.post(
-        Uri.parse("http://192.168.43.50/namaste_guide_api/update_mood.php"),
+        Uri.parse("http://192.168.31.71/namaste_guide_api/update_mood.php"),
         body: {
           'mood_id': widget.moodId,
           'mood': updatedMood,
