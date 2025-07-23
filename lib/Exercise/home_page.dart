@@ -91,7 +91,7 @@ class _HomePageState extends State<HomePage> {
                             Container(
                               width: 170,
                               padding: const EdgeInsets.symmetric(
-                                  vertical: 60, horizontal: 20),
+                                  vertical: 40, horizontal: 20),
                               child: Text(
                                 yogaplanlist[index]['yoga_plan_name'] ?? "No Name",
                                 style: const TextStyle(
