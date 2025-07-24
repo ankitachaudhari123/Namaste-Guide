@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'expersics.dart';
+import 'divide_exercise_for_category.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -69,7 +69,7 @@ class _HomePageState extends State<HomePage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Breathing_expercise(yogaPlanId: yogaPlanId),
+                            builder: (context) => divide_exercises(),
                           ),
                         );
                       },
