@@ -141,7 +141,7 @@ class _ProfilePageState extends State<ProfilePage> {
       return;
     }
 
-    String uri = "http://192.168.43.50/namaste_guide_api/feach_user_info.php";
+    String uri = "http://192.168.31.71/namaste_guide_api/feach_user_info.php";
 
     try {
       var response = await http.post(
