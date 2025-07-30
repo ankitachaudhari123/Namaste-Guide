@@ -155,14 +155,11 @@ class _MoodInDetailState extends State<MoodInDetail> {
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : moodinfo.isEmpty
-                  ? const Center(
-                      child: Text(
-                        "No mood data available",
-                        style: TextStyle(color: Colors.white, fontSize: 18),
-                      ),
-                    )
+            ? const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                ),
+              )
                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
