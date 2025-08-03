@@ -42,7 +42,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> userinfodata() async {
-    String uri = "http://192.168.31.71/namaste_guide_api/feach_user_info.php";
+    String uri = "http://192.168.43.50/namaste_guide_api/feach_user_info.php";
 
     try {
       var response = await http.post(
@@ -92,7 +92,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
     try {
       var response = await http.post(
-        Uri.parse("http://192.168.31.71/namaste_guide_api/delete_account.php"),
+        Uri.parse("http://192.168.43.50/namaste_guide_api/delete_account.php"),
         body: {'email_id': email},
       );
 

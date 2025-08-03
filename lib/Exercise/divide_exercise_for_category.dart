@@ -19,7 +19,7 @@ class _divide_exercisesState extends State<divide_exercises> {
   bool isLoading = true;
 
   Future<void> yogaplans() async {
-    String uri = "http://192.168.31.71/namaste_guide_api/feach_category.php";
+    String uri = "http://192.168.43.50/namaste_guide_api/feach_category.php";
 
     try {
       var response = await http.post(

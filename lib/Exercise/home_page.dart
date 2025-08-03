@@ -16,7 +16,7 @@ class _HomePageState extends State<HomePage> {
   bool isLoading = true; // 👈 Added loading state
 
   Future<void> yogaplans() async {
-    String uri = "http://192.168.31.71/namaste_guide_api/feach_yoga_plans.php";
+    String uri = "http://192.168.43.50/namaste_guide_api/feach_yoga_plans.php";
 
     try {
       var response = await http.post(Uri.parse(uri));

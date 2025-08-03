@@ -1,9 +1,20 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.namaste_guide">
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+
+
    <application
         android:label="namaste_guide"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+        <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver" android:enabled="true" 
+        android:exported="true"/>
+        
+        <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" android:exported="true"/>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

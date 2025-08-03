@@ -1,19 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:namaste_guide/Bottom_Nav_Bar/BottomNav.dart';
 
+import 'notification_service.dart'; 
 import 'SplashScreen.dart';
 import 'User_Info/EditSingnUpInfo.dart';
 import 'User_Info/SingnUp.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized(); 
+  await NotificationService.init(); 
+  await askNotificationPermission();
   runApp(const MyApp());
+}
+Future<void> askNotificationPermission() async {
+  final status = await Permission.notification.status;
+  if (!status.isGranted) {
+    final result = await Permission.notification.request();
+    print('🔐 Notification permission: $result');
+  }
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -21,12 +32,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      // home: BottomNavPage(),
       home: SplashScreen(),
       routes: {
-      'editProfile': (context) => EditInfo(), // Route for Edit Info page
-      'HomePage': (context) => BottomNavPage(), // Route for Login page
-    },
+        'editProfile': (context) => EditInfo(), 
+        'HomePage': (context) => BottomNavPage(), 
+      },
     );
   }
 }

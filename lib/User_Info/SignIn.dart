@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:namaste_guide/SplashScreen.dart';
 import 'package:namaste_guide/User_Info/SingnUp.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -21,7 +22,7 @@ class _SignInState extends State<SignIn> {
     String email = _emailController.text.trim();
     String password = _passwordController.text.trim();
 
-    var url = Uri.parse("http://192.168.31.71/namaste_guide_api/sign_in.php");
+    var url = Uri.parse("http://192.168.43.50/namaste_guide_api/sign_in.php");
 
     try {
       var response = await http.post(
@@ -42,7 +43,7 @@ class _SignInState extends State<SignIn> {
 
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => BottomNavPage()),
+            MaterialPageRoute(builder: (context) => SplashScreen()),
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
