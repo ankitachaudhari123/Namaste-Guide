@@ -64,10 +64,10 @@ static Future<void> scheduleDailyNotification({
 
 }
 
-  /// ✅ Cancel all scheduled notifications
-  static Future<void> cancelAll() async {
-    await _notificationsPlugin.cancelAll();
-  }
+  // /// ✅ Cancel all scheduled notifications
+  // static Future<void> cancelAll() async {
+  //   await _notificationsPlugin.cancelAll();
+  // }
 
   /// ✅ Helper to get the next instance of the target time
   static tz.TZDateTime _nextInstanceOfTime(int hour, int minutes) {
