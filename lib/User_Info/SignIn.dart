@@ -18,49 +18,104 @@ class _SignInState extends State<SignIn> {
   final TextEditingController _passwordController = TextEditingController();
   bool _obscurePassword = true;
 
+  // Future<void> _signIn() async {
+  //   String email = _emailController.text.trim();
+  //   String password = _passwordController.text.trim();
+
+  //   var url = Uri.parse("http://192.168.43.50/namaste_guide_api/sign_in.php");
+
+  //   try {
+  //     var response = await http.post(
+  //       url,
+  //       body: jsonEncode({
+  //         'email': email, 
+  //         'password': password
+  //       }),
+  //       headers: {"Content-Type": "application/json"},
+  //     );
+
+  //     var responseData = jsonDecode(response.body);
+
+  //     if (response.statusCode == 200) {
+  //       if (responseData["status"] == "success") {
+  //         SharedPreferences prefs = await SharedPreferences.getInstance();
+  //         await prefs.setString('user_email', email);
+
+  //         Navigator.pushReplacement(
+  //           context,
+  //           MaterialPageRoute(builder: (context) => SplashScreen()),
+  //         );
+  //       } else {
+  //         ScaffoldMessenger.of(context).showSnackBar(
+  //           SnackBar(content: Text(responseData["message"])),
+  //         );
+  //       }
+  //     } else {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         const SnackBar(content: Text("Server Error! Please try again later.")),
+  //       );
+  //     }
+  //   } catch (e) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text("Error: $e")),
+  //     );
+  //   }
+  // }
+
   Future<void> _signIn() async {
-    String email = _emailController.text.trim();
-    String password = _passwordController.text.trim();
+  String email = _emailController.text.trim();
+  String password = _passwordController.text.trim();
 
-    var url = Uri.parse("http://192.168.43.50/namaste_guide_api/sign_in.php");
+  var url = Uri.parse("http://192.168.43.50/namaste_guide_api/sign_in.php");
 
-    try {
-      var response = await http.post(
-        url,
-        body: jsonEncode({
-          'email': email, 
-          'password': password
-        }),
-        headers: {"Content-Type": "application/json"},
-      );
+  try {
+    var response = await http.post(
+      url,
+      body: jsonEncode({
+        'email': email,
+        'password': password
+      }),
+      headers: {"Content-Type": "application/json"},
+    );
 
-      var responseData = jsonDecode(response.body);
+    var responseData = jsonDecode(response.body);
 
-      if (response.statusCode == 200) {
-        if (responseData["status"] == "success") {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          await prefs.setString('user_email', email);
+    if (response.statusCode == 200) {
+      // Check if access token is returned
+      if (responseData["access_token"] != null && responseData["refresh_token"] != null) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
 
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => SplashScreen()),
-          );
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(responseData["message"])),
-          );
-        }
+        // Save tokens and expiration
+        await prefs.setString('access_token', responseData['access_token']);
+        await prefs.setString('refresh_token', responseData['refresh_token']);
+        await prefs.setString('token_expiration', responseData['token_expiration'].toString());
+        await prefs.setString('user_email', email);
+
+        // 🔁 Optional: print for debugging
+        print("Access Token: ${responseData['access_token']}");
+        print("Refresh Token: ${responseData['refresh_token']}");
+
+        // Navigate to splash or main screen
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => SplashScreen()),
+        );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Server Error! Please try again later.")),
+          const SnackBar(content: Text("Login failed: Tokens not received")),
         );
       }
-    } catch (e) {
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error: $e")),
+        SnackBar(content: Text(responseData["message"] ?? "Login failed")),
       );
     }
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Error: $e")),
+    );
   }
+}
 
 
   @override
