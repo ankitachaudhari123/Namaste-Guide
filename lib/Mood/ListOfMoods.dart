@@ -29,22 +29,18 @@ class _ListOfMoodsState extends State<ListOfMoods> {
       email = storedEmail ?? "";
     });
 
-    print("mood email: $email");
-
     if (email.isNotEmpty) {
       FetchMoodData();
+    } else {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
   Future<void> FetchMoodData() async {
-    if (email.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Shared preferences email ID missing")),
-      );
-      return;
-    }
-
-    String uri = "http://192.168.43.50/namaste_guide_api/feach_your_mood_data.php";
+    String uri =
+        "http://192.168.43.50/namaste_guide_api/feach_your_mood_data.php";
 
     try {
       var response = await http.post(
@@ -56,7 +52,6 @@ class _ListOfMoodsState extends State<ListOfMoods> {
         setState(() {
           moodlist = jsonDecode(response.body);
           isLoading = false;
-          print("mood list: $moodlist");
         });
       } else {
         print("Error: ${response.statusCode}");
@@ -72,6 +67,80 @@ class _ListOfMoodsState extends State<ListOfMoods> {
     }
   }
 
+  // Group moods by month-year
+  Map<String, List<dynamic>> groupMoodsByMonth(List moods) {
+    Map<String, List<dynamic>> grouped = {};
+
+    for (var mood in moods) {
+      String dateStr = mood['date'] ?? "";
+      if (dateStr.isEmpty) continue;
+
+      DateTime parsedDate = DateTime.tryParse(dateStr) ?? DateTime.now();
+
+      String monthYear = "${getMonthName(parsedDate.month)} ${parsedDate.year}";
+
+      if (!grouped.containsKey(monthYear)) {
+        grouped[monthYear] = [];
+      }
+      grouped[monthYear]!.add(mood);
+    }
+
+    // Sort months descending (latest first)
+    var sortedKeys = grouped.keys.toList()
+      ..sort((a, b) {
+        DateTime dateA = DateTime.parse(
+            "${a.split(" ")[1]}-${monthNumber(a.split(" ")[0]).toString().padLeft(2, "0")}-01");
+        DateTime dateB = DateTime.parse(
+            "${b.split(" ")[1]}-${monthNumber(b.split(" ")[0]).toString().padLeft(2, "0")}-01");
+        return dateB.compareTo(dateA);
+      });
+
+    Map<String, List<dynamic>> sortedMap = {
+      for (var key in sortedKeys) key: grouped[key]!
+    };
+
+    return sortedMap;
+  }
+
+  // Month name helper
+  String getMonthName(int month) {
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ];
+    return months[month - 1];
+  }
+
+  // Month number helper
+  int monthNumber(String monthName) {
+    const months = {
+      "January": 1,
+      "February": 2,
+      "March": 3,
+      "April": 4,
+      "May": 5,
+      "June": 6,
+      "July": 7,
+      "August": 8,
+      "September": 9,
+      "October": 10,
+      "November": 11,
+      "December": 12,
+    };
+    return months[monthName] ?? 1;
+  }
+
+  // Emoji for moods
   String getMoodEmoji(String mood) {
     switch (mood.toLowerCase()) {
       case 'happy':
@@ -141,72 +210,86 @@ class _ListOfMoodsState extends State<ListOfMoods> {
 
   @override
   Widget build(BuildContext context) {
+    final groupedMoods = groupMoodsByMonth(moodlist);
+
     return Scaffold(
-       backgroundColor: const Color(0xff1f1835),
-    appBar: AppBar(
-      title: Text(
-        isLoading ? "Loading..." : (moodlist.isNotEmpty ? "Your Moods" : "No Mood Data"),
-        style: const TextStyle(color: Colors.white),
-      ),
       backgroundColor: const Color(0xff1f1835),
-      iconTheme: const IconThemeData(color: Colors.white),
-    ),
+      // appBar: AppBar(
+      //   title: const Text("Your Moods", style: TextStyle(color: Colors.white)),
+      //   backgroundColor: const Color(0xff1f1835),
+      //   iconTheme: const IconThemeData(color: Colors.white),
+      // ),
       body: Container(
         width: double.infinity,
         height: double.infinity,
         color: const Color(0xff1f1835),
-        child: Column(
-          children: [
-            Expanded(
-              child: isLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.white,
-                      ),
-                    )
-                  : moodlist.isEmpty
-                      ? const Center(
-                          child: Text(
-                            "No mood data available",
-                            style: TextStyle(color: Colors.white, fontSize: 16),
+        child: isLoading
+            ? const Center(child: CircularProgressIndicator(color: Colors.white))
+            : groupedMoods.isEmpty
+                ? const Center(
+                    child: Text(
+                      "No mood data available",
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                  )
+                : ListView(
+                    children: groupedMoods.entries.map((entry) {
+                      String month = entry.key;
+                      List moods = entry.value;
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Month Header
+                          Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Text(
+                              month,
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
-                        )
-                      : ListView.builder(
-                          itemCount: moodlist.length,
-                          itemBuilder: (context, index) {
-                            String mood = moodlist[index]['mood'] ?? "Unknown";
-                            String moodId = moodlist[index]['mood_id'].toString();
-                            String moodTime = moodlist[index]['time'] ?? "No Time";
+                          // Mood Items
+                          ...moods.map((mood) {
+                            String moodName = mood['mood'] ?? "Unknown";
+                            String moodId = mood['mood_id'].toString();
+                            String moodTime = mood['time'] ?? "No Time";
 
                             return GestureDetector(
                               onTap: () {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => MoodInDetail(MoodId: moodId),
+                                    builder: (context) =>
+                                        MoodInDetail(MoodId: moodId),
                                   ),
                                 );
                               },
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 5),
                                 child: Container(
-                                  width: double.infinity,
                                   height: 70,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
                                     gradient: const LinearGradient(
-                                      colors: [Color(0xff7c49de), Color(0xffdcb383)],
+                                      colors: [
+                                        Color(0xff7c49de),
+                                        Color(0xffdcb383)
+                                      ],
                                       begin: Alignment.bottomLeft,
                                       end: Alignment.bottomRight,
                                     ),
                                   ),
                                   child: ListTile(
                                     leading: Text(
-                                      getMoodEmoji(mood),
+                                      getMoodEmoji(moodName),
                                       style: const TextStyle(fontSize: 30),
                                     ),
                                     title: Text(
-                                      "Mood: $mood",
+                                      "Mood: $moodName",
                                       style: const TextStyle(color: Colors.white),
                                     ),
                                     trailing: Text(
@@ -217,11 +300,11 @@ class _ListOfMoodsState extends State<ListOfMoods> {
                                 ),
                               ),
                             );
-                          },
-                        ),
-            ),
-          ],
-        ),
+                          }).toList()
+                        ],
+                      );
+                    }).toList(),
+                  ),
       ),
     );
   }
